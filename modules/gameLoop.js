@@ -57,6 +57,11 @@ const tick = () => {
   });
 
   currentAirports.forEach((airport) => {
+    
+    if (airport.type === "INCOMING") {
+      airport.flashed = !airport.flashed;
+      if (airport.flashed) { return; }
+    }
     placeAirport(
       gameArea.context,
       airport.location[0],
