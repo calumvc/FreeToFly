@@ -50,9 +50,7 @@ const tick = () => {
   placeBackground(gameArea.context);
 
   live_planes.forEach((plane) => {
-    placePlane(
-      gameArea.context,
-      plane.currentPos[0],
+    placePlane( gameArea.context, plane.currentPos[0],
       plane.currentPos[1],
       plane.rotation,
     );
@@ -68,8 +66,9 @@ const tick = () => {
     }
 
     var crash = checkCollision(live_planes);
+    console.log("CRASSSH ", crash);
     if(crash != 0){
-      placeExplosion(live_planes[crash[0]].currentPos[0], live_planescrash[0].currentPos[1]);
+      placeExplosion(live_planes[crash[0]].currentPos[0], live_planes[crash[0]].currentPos[1]);
       console.log("CRASH");
       gaming = false;
     }
@@ -77,7 +76,7 @@ const tick = () => {
   });
 
   currentAirports.forEach((airport) => {
-    console.log(airport.flashed)
+    // console.log(airport.flashed)
     placeAirport(
       gameArea.context,
       airport.location[0],
@@ -112,11 +111,10 @@ const tick = () => {
     spawnMission();
   }
 
-  console.log(timer);
+  console.log("Timer :", timer);
   if (timer % LEVELTIME == 0) {
     level++;
-    console.log("Level incremented");
-    console.log(level);
+    console.log("Level :", level);
   }
   timer++;
 
@@ -144,7 +142,7 @@ function cleanPath(path){
     var tempCoords = [path[i][1], path[i][2]];
     clean.push(tempCoords);
   }
-  console.log(clean);
+  // console.log(clean);
   return clean
 }
 export function verifyPaths(){
@@ -153,7 +151,6 @@ export function verifyPaths(){
     verify(pathToVerify);
   }
 }
-
 
 export function verify(path){
   if (path[1][0] === undefined){
@@ -182,6 +179,9 @@ export function verify(path){
             if (airportB.location[1] - endPoint[1] < LEEWAY && airportB.location[1] - endPoint[1] > -LEEWAY){
               console.log("END POINT IS VALID");
 
+              airportA.inUse = true;
+              airportB.inUse = true;
+              
               pathsArray.push(cleanPath(path[1]));
               live_planes.push(createPlane(cleanPath(path[1]),airportA,airportB));
               return; 

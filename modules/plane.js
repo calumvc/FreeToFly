@@ -50,8 +50,8 @@ function calcRotation(plane){
     }
     var xDiff = plane.path[index+1][0] - plane.path[index][0];
     var yDiff = plane.path[index+1][1] - plane.path[index][1];
-    console.log(xDiff);
-    console.log(yDiff);
+    // console.log(xDiff);
+    // console.log(yDiff);
     if(yDiff == 0 && xDiff > 0){
         return 90;
     }
