@@ -1,6 +1,6 @@
 import { placePlane, placeAirport } from "./helpRender.js";
 import { createAirport, currentAirports } from "./airport.js";
-import { updateCurrentPlanePos } from "./plane.js";
+import { updateCurrentPlanePos, createPlane } from "./plane.js";
 import { gameArea } from "../main.js";
 
 var timer = 1; // game timer
@@ -38,11 +38,15 @@ const tick = () => {
   live_planes.forEach((plane) => {
     placePlane(
       gameArea.context,
-      plane.CurrentPos[0],
-      plane.CurrentPos[1],
+      plane.currentPos[0],
+      plane.currentPos[1],
       plane.rotation
     );
-    updateCurrentPlanePos(plane);
+    if(updateCurrentPlanePos(plane) == 0){
+      var index = live_planes.indexOf(plane);
+      live_planes.splice(index,1);
+    }
+
   });
 
   currentAirports.forEach((airport) => {

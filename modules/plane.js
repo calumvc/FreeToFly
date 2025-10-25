@@ -1,4 +1,4 @@
-function createPlane(path){
+export function createPlane(path){
     const plane = new Object({
         path: path,
         currentPos: path[0],
@@ -13,11 +13,11 @@ function getCurrentPlanePos(plane) {
 
 //returns 0 if plane has completed its path, 1 otherwise 
 export function updateCurrentPlanePos(plane){
-    var index = path.indexOf(plane.currentPos);
-    if(index == path.length){
+    var index = plane.path.indexOf(plane.currentPos);
+    if(index == plane.path.length-1){
         return 0;
     }
-    plane.currentPos = path[index+1];
+    plane.currentPos = plane.path[index+1];
     plane.rotation = calcRotation(plane);
     return 1;
 }
@@ -40,10 +40,9 @@ function findDistance(plane1, plane2){
 
 function calcRotation(plane){
     var rotation = 0;
-    var index = path.indexOf(plane.currentPos)
-    var xDiff = plane.currentPos[index+1][0] - plane.currentPos[index][0];
-    var yDiff = plane.currentPos[index+1][1] - plane.currentPos[index][1];
-    var modifier = 0;
+    var index = plane.path.indexOf(plane.currentPos)
+    var xDiff = plane.path[index+1][0] - plane.path[index][0];
+    var yDiff = plane.path[index+1][1] - plane.path[index][1];
     if(yDiff == 0 && xDiff > 0){
         return 90;
     }
@@ -56,14 +55,14 @@ function calcRotation(plane){
     else if(xDiff == 0 && yDiff < 0){
         return 0;
     }
-    else if(xDiff > 0 && ydiff < 0){
-        return Math.atan(ydiff/xDiff) + 90;
+    else if(xDiff > 0 && yDiff < 0){
+        return Math.atan(yDiff/xDiff) + 90;
     }
     else if(xDiff < 0 && yDiff < 0){
-        return Math.atan(yDiff/xDiff);
+        return Math.atan(yDiff/xDiff) + 180;
     }
     else if(xDiff < 0 && yDiff > 0){
-        return Math.atan(yDiff/xDiff);
+        return Math.atan(yDiff/xDiff) + 270;
     }
     else{
         return 0;
