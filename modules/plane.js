@@ -25,7 +25,7 @@ export function updateCurrentPlanePos(plane){
     return 1;
 }
 
-function checkCollision(planes){
+export function checkCollision(planes){
     for(let i = 0; i < planes.length; i++){
         for(let j = 0; i < planes.length; i++){
             var distance = findDistance(plane1, plane2);

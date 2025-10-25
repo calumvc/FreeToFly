@@ -5,7 +5,6 @@ const bg = (() => {
 })();
 
 export function placePlane(context, x, y, deg=0) {
-    console.log(deg);
     return placeURL("./assets/plane.png", context, x, y, deg);
 }
 export function placeAirport(context, x, y, colour, radius=4) {
@@ -14,6 +13,9 @@ export function placeAirport(context, x, y, colour, radius=4) {
     context.fillStyle = colour;
     context.fill();
     context.lineWidth = 4;
+}
+export function placeExplosion(context, x, y){
+    return placeURL("./assets/collide.png", context, x, y);
 }
 
 export function placeURL(src, context, x, y, deg=0) {
