@@ -6,7 +6,7 @@ window.addEventListener("DOMContentLoaded",(e)=>{
     var firstDraw = 0; //get rid of random line from top left
     var lastposition = [0,0];
     var pathsDic = {};
-    //pathsDic[pathcount(id)][0 for dot records and 1 for drawing][separate records]
+    //pathsDic[pathcount(id)][0 for dot records and 1 for drawing][individual records]
     var pathcount = 0;
     var currentPath = [];
 
@@ -97,7 +97,7 @@ window.addEventListener("DOMContentLoaded",(e)=>{
     flag = 0;
     firstDraw = 0;
     record=[];
-    console.log(currentPath);
+    console.log(record);
     currentPath=[];
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
