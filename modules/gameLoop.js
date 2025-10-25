@@ -10,12 +10,9 @@ var level = 1;
 const LEVELTIME = 20;
 var live_planes = [];
 
-for(let i = 0; i < 25; i++){
-  createAirport("Black");
-}
+var colours = ["Blue", "Red", "Cyan", "Pink", "Purple", "Green", "Yellow", "Orange", "Lime", "Navy"]
 
 export default function gameLoop(){
-
   setInterval(tick, 1000);
 }
 
@@ -32,7 +29,7 @@ const tick = () => {
   });
 
   currentAirports.forEach(airport => {
-    placeAirport(gameArea.context, airport.location[0], airport.location[1]);
+    placeAirport(gameArea.context, airport.location[0], airport.location[1], airport.colour);
   });
 
     if ((timer % Math.round((LEVELTIME / (level * 1.5))) == 0) || (timer == 2)){ // logic to spawn planes, increasing as the level increments{
@@ -50,7 +47,6 @@ const tick = () => {
   if (timer === 120){
     gaming = false;
   }
-
 }
 
 export function gameOver(){
@@ -59,6 +55,11 @@ export function gameOver(){
 
 export function spawnMission(){
   console.log("Mission from airport A to airport B")
+  var colour = colours[0];
+  colours.push(colours[0]);
+  colours.shift();
+  createAirport(colour);
+  createAirport(colour);
 }
 
 export function spawnAirport(){}
