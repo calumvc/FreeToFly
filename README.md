@@ -1,6 +1,7 @@
 
-# Lightweight Browser JavaScript Game for Free2Book
+# FreeToFly
 
+## A simple game for 404 pages
 
 ## Testing
 
