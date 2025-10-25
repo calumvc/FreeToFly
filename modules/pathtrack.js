@@ -5,10 +5,10 @@ window.addEventListener("DOMContentLoaded",(e)=>{
     var flag = 0;
     var firstDraw = 0; //get rid of random line from top left
     var lastposition = [0,0];
-    var pathsDic = {};
     //pathsDic[pathcount(id)][0 for dot records and 1 for drawing][separate records]
-    var pathcount = 0;
+    // var pathcount = 0;
     var currentPath = [];
+
 
     function singleRecord(event,record){
         var x = event.clientX;
@@ -48,7 +48,7 @@ window.addEventListener("DOMContentLoaded",(e)=>{
         ctx.arc(x,y,2,0,2*Math.PI); // 2 is the radius in case you wanna change
         ctx.fill();
         ctx.closePath();
-        currentPath.push(["dot",x,y,3,0,2*Math.PI]);
+        currentPath.push(["dot",x,y,2,0,2*Math.PI]);
     }
 
     function pathComplete(index){
@@ -68,9 +68,7 @@ window.addEventListener("DOMContentLoaded",(e)=>{
                 if (pathsDic[i][1][j][0]=="line"){
                     ctx.beginPath();
                     ctx.moveTo(pathsDic[i][1][j][1],pathsDic[i][1][j][2]);
-                    ctx.lineTo(pathsDic[i][1][j][3],pathsDic[i][1][j][4]);
-                    ctx.stroke();
-                    ctx.closePath();
+                    ctx.lineTo(pathsDic[i][1][j][3],pathsDic[i][1][j][4]); ctx.stroke(); ctx.closePath();
                 } else if (pathsDic[i][1][j][0]=="dot"){
                     ctx.beginPath();
                     ctx.fillStyle = "grey";
@@ -97,8 +95,11 @@ window.addEventListener("DOMContentLoaded",(e)=>{
     flag = 0;
     firstDraw = 0;
     record=[];
-    console.log(currentPath);
+    // console.log(currentPath);
+    addValidPath();
+    // console.log(pathsDic[pathcount]);
     currentPath=[];
+    pathcount++;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawValidPath();
