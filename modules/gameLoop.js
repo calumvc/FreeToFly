@@ -50,7 +50,8 @@ const tick = () => {
       gameArea.context,
       airport.location[0],
       airport.location[1],
-      airport.colour
+      airport.colour,
+      airport.type
     );
   });
 
@@ -81,8 +82,8 @@ export function spawnMission() {
   var colour = colours[0];
   colours.push(colours[0]);
   colours.shift();
-  createAirport(colour);
-  createAirport(colour);
+  createAirport(colour, "OUTGOING"); // create sender airport?
+  createAirport(colour, "INCOMING"); // create recipient airport?
 }
 
 export function spawnAirport() {}

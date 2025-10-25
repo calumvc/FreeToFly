@@ -26,7 +26,7 @@ const airports = {
 export let currentAirports = [];
 let currentAirportNames = [];
 
-export function createAirport(colour) {
+export function createAirport(colour, type) {
   const airportKeys = Object.keys(airports);
   if (airportKeys.length == currentAirports.length) {
     console.log("U tried to make a new airport but we dont have that many :p");
@@ -45,6 +45,7 @@ export function createAirport(colour) {
     name: airportName,
     location: airports[airportName],
     colour: colour,
+    type: type
   });
 
   currentAirportNames.push(airport.name);
