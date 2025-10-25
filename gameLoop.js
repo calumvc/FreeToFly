@@ -1,14 +1,25 @@
+var timer = 0; // game timer
+var gaming; // boolean for alive
 
 export default function gameLoop(){
-  var timer; // timer for the game
   var score;
-  var gaming; // boolean for alive
 
   setInterval(tick, 1000);
 }
 
-function tick(){
+const tick = () => {
+
+  if (gaming === false){
+    clearInterval();
+    return;
+  }
+
   console.log("Hey");
   console.log(timer);
   timer++;
+
+  if (timer === 5){
+    gaming = false;
+  }
+
 }

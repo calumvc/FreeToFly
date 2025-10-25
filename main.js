@@ -1,4 +1,4 @@
-import gameLoop from ("./gameLoop");
+import gameLoop from "./gameLoop.js";
 
 var gameArea = {
   canvas : document.createElement("canvas"),
