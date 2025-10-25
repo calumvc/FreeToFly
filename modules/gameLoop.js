@@ -1,6 +1,6 @@
-import { placePlane, placeAirport, placeBackground } from "./helpRender.js";
+import { placePlane, placeAirport, placeBackground, placeExplosion } from "./helpRender.js";
 import { createAirport, currentAirports } from "./airport.js";
-import { updateCurrentPlanePos, createPlane } from "./plane.js";
+import { updateCurrentPlanePos, createPlane, checkCollision } from "./plane.js";
 import { gameArea } from "../main.js";
 
 var timer = 1; // game timer
@@ -9,6 +9,7 @@ var gaming; // boolean for alive
 var level = 1;
 const LEVELTIME = 20;
 const LEEWAY = 20;
+const GAMETIME = 300;
 var live_planes = [];
 var pathCounter = 0;
 var pathsArray = [];
@@ -32,7 +33,7 @@ var colours = [
 ];
 
 export default function gameLoop() {
-  setInterval(tick, 200);
+  setInterval(tick, 1000);
 }
 
 const tick = () => {
@@ -54,7 +55,7 @@ const tick = () => {
       gameArea.context,
       plane.currentPos[0],
       plane.currentPos[1],
-      plane.rotation
+      plane.rotation,
     );
     if(updateCurrentPlanePos(plane) == 0){
       var index = live_planes.indexOf(plane);
@@ -64,6 +65,13 @@ const tick = () => {
       currentAirports.splice(airportBIndex,1);
       live_planes.splice(index,1);
       score += 5
+    }
+
+    var crash = checkCollision(live_planes);
+    if(crash != 0){
+      placeExplosion(crash[0].currentPos[0], crash[0].currentPos[1]);
+      console.log("CRASH");
+      gaming = false;
     }
 
   });
@@ -96,7 +104,7 @@ const tick = () => {
   }
   timer++;
 
-  if (timer === 120) {
+  if (timer === GAMETIME) {
     gaming = false;
   }
 };
