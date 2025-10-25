@@ -10,6 +10,7 @@ var level = 1;
 const LEVELTIME = 20;
 const LEEWAY = 20;
 const GAMETIME = 300;
+const MAXAIRPORTTIME = 30;
 var live_planes = [];
 var pathCounter = 0;
 var pathsArray = [];
@@ -68,7 +69,7 @@ const tick = () => {
 
     var crash = checkCollision(live_planes);
     if(crash != 0){
-      placeExplosion(crash[0].currentPos[0], crash[0].currentPos[1]);
+      placeExplosion(live_planes[crash[0]].currentPos[0], live_planescrash[0].currentPos[1]);
       console.log("CRASH");
       gaming = false;
     }
@@ -84,6 +85,22 @@ const tick = () => {
       airport.colour,
       airport.flashed ? 6 : 4
     );
+    airport.timeElapsed += 1;
+
+    var index = currentAirports.indexOf(airport);
+
+    if(airport.type === "OUTGOING" && airport.inUse == true){
+      currentAirports.splice(index,1);
+    }
+
+    if(airport.timeElapsed >= MAXAIRPORTTIME && airport.type === "OUTGOING"){
+      currentAirports.splice(index,1);
+      console.log("bleh");
+    }
+
+    if(airport.timeElapsed >=MAXAIRPORTTIME && airport.inUse == false){
+      currentAirports.splice(index,1);
+    }
 
     if (airport.type === "OUTGOING") {
       airport.flashed = !airport.flashed;

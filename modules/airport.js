@@ -60,7 +60,8 @@ export function createAirport(colour, type) {
     colour: colour,
     type: type,
     flashed: false,
-    timeElapsed: 0
+    timeElapsed: 0,
+    inUse: false,
   });
 
   currentAirportNames.push(airport.name);
