@@ -35,7 +35,7 @@ window.addEventListener("DOMContentLoaded",(e)=>{
     currentY = event.clientY;
     lastX = lastpos[0];
     lastY = lastpos[1];
-    if ((currentX - lastX)**2 + (currentY - lastY)**2 > 60){ // modify the number to determine the distance between path dots
+    if ((currentX - lastX)**2 + (currentY - lastY)**2 > 20){ // modify the number to determine the distance between path dots
         return 1;
     }else {
         return 0;

@@ -32,7 +32,7 @@ var colours = [
 ];
 
 export default function gameLoop() {
-  setInterval(tick, 200);
+  setInterval(tick, 1000);
 }
 
 const tick = () => {
@@ -43,9 +43,7 @@ const tick = () => {
     return;
   }
   
-  // console.log(pathcount);
-  // console.log(pathCounter);
-  verifyPaths();
+  verifyPaths(); // verifies all line strokes in the queue, 
 
   placeBackground(gameArea.context);
 
@@ -56,6 +54,7 @@ const tick = () => {
       plane.currentPos[1],
       plane.rotation
     );
+
     if(updateCurrentPlanePos(plane) == 0){
       var index = live_planes.indexOf(plane);
       var airportAIndex = currentAirports.indexOf(plane.airportA);
@@ -63,7 +62,7 @@ const tick = () => {
       var airportBIndex = currentAirports.indexOf(plane.airportB);
       currentAirports.splice(airportBIndex,1);
       live_planes.splice(index,1);
-      score += 5
+      score += 5;
     }
 
   });
@@ -78,7 +77,7 @@ const tick = () => {
       airport.flashed ? 6 : 4
     );
 
-    if (airport.type === "INCOMING") {
+    if (airport.type === "OUTGOING") {
       airport.flashed = !airport.flashed;
     }
   });
@@ -132,6 +131,9 @@ export function verifyPaths(){
 
 
 export function verify(path){
+  if (path[1][0] === undefined){
+    return;
+  }
   var startPoint = [path[1][0][1], path[1][0][2]];
   var endPointReference = path[1];
   var endPointLength = endPointReference.length-1;
