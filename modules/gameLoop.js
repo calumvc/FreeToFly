@@ -1,4 +1,4 @@
-import { placePlane, placeAirport } from "./helpRender.js";
+import { placePlane, placeAirport, placeBackground } from "./helpRender.js";
 import { createAirport, currentAirports } from "./airport.js";
 import { updateCurrentPlanePos } from "./plane.js";
 import { gameArea } from "../main.js";
@@ -34,6 +34,8 @@ const tick = () => {
     gameOver();
     return;
   }
+
+  placeBackground(gameArea.context);
 
   live_planes.forEach((plane) => {
     placePlane(
