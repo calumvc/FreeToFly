@@ -1,8 +1,10 @@
-export function createPlane(path){
+export function createPlane(path,airportA,airportB){
     const plane = new Object({
         path: path,
         currentPos: path[0],
         rotation: 0,
+        airportA: airportA,
+        airportB: airportB,
     });
     plane.rotation = calcRotation(plane);
     return plane;

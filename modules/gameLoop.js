@@ -8,6 +8,7 @@ var score = 0; // user's score
 var gaming; // boolean for alive
 var level = 1;
 const LEVELTIME = 20;
+const LEEWAY = 20;
 var live_planes = [];
 var pathCounter = 0;
 var pathsArray = [];
@@ -26,7 +27,7 @@ var colours = [
 ];
 
 export default function gameLoop() {
-  setInterval(tick, 200);
+  setInterval(tick, 1000);
 }
 
 const tick = () => {
@@ -52,12 +53,22 @@ const tick = () => {
     );
     if(updateCurrentPlanePos(plane) == 0){
       var index = live_planes.indexOf(plane);
+      var airportAIndex = currentAirports.indexOf(plane.airportA);
+      currentAirports.splice(airportAIndex,1);
+      var airportBIndex = currentAirports.indexOf(plane.airportB);
+      currentAirports.splice(airportBIndex,1);
       live_planes.splice(index,1);
+      score += 5
     }
 
   });
 
   currentAirports.forEach((airport) => {
+    
+    if (airport.type === "INCOMING") {
+      airport.flashed = !airport.flashed;
+      if (airport.flashed) { return; }
+    }
     placeAirport(
       gameArea.context,
       airport.location[0],
@@ -117,21 +128,35 @@ export function verifyPaths(){
 
 export function verify(path){
   var startPoint = [path[1][0][1], path[1][0][2]];
-  
-  console.log("START POINT -> ", startPoint);
-  var endPointReference = path[1]
+  var endPointReference = path[1];
   var endPointLength = endPointReference.length-1;
   var endPoint = [path[1][endPointLength][1], path[1][endPointLength][2]];
 
-  console.log("END POINT -> ", endPoint);
+  for (let k = 0; k < currentAirports.length; k++) { // logic to determine if its valid
+    if (currentAirports[k].type === "OUTGOING"){
+      if (currentAirports[k].location[0] - startPoint[0] < LEEWAY && currentAirports[k].location[0] - startPoint[0] > -LEEWAY){
+        if (currentAirports[k].location[1] - startPoint[1] < LEEWAY && currentAirports[k].location[1] - startPoint[1] > -LEEWAY){
+          console.log("START POINT IS VALID");
+          var airportA = currentAirports[k];
 
-  console.log("PATH", path[1]); // FOR PLANE DEBUGGING
-  pathsArray.push(cleanPath(path[1]));
-  live_planes.push(createPlane(cleanPath(path[1])));
+          var airportB;
+          currentAirports.forEach(a => {
+            if (a.type == "INCOMING" && a !== airportA && a.colour === airportA.colour){
+              airportB = a;
+            }
+          });
 
+          if (airportB.location[0] - endPoint[0] < LEEWAY && airportB.location[0] - endPoint[0] > -LEEWAY){
+            if (airportB.location[1] - endPoint[1] < LEEWAY && airportB.location[1] - endPoint[1] > -LEEWAY){
+              console.log("END POINT IS VALID");
+
+              pathsArray.push(cleanPath(path[1]));
+              live_planes.push(createPlane(cleanPath(path[1]),airportA,airportB));
+              return; 
+            }
+          }
+        }
+      }
+    }
+  }
 }
-
-
-export function spawnAirport() {}
-
-export function spawnPlane() {}
