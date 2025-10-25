@@ -4,17 +4,11 @@ const bg = (() => {
     return bgObj
 })();
 
-let imgObj = (() => {
-    let imgObj = document.createElement("img");
-    imgObj.src = ""
-    return imgObj
-})();
-
 export function placePlane(context, x, y, deg=0) {
+    console.log(deg);
     return placeURL("./assets/plane.png", context, x, y, deg);
 }
-export function placeAirport(context, x, y, colour) {
-    const radius = 4
+export function placeAirport(context, x, y, colour, radius=4) {
     context.beginPath();
     context.arc(x, y, radius, 0, 2 * Math.PI);
     context.fillStyle = colour;
@@ -23,6 +17,7 @@ export function placeAirport(context, x, y, colour) {
 }
 
 export function placeURL(src, context, x, y, deg=0) {
+    let imgObj = document.createElement("img");
     imgObj.src = src
 
     // draw image at 0,0 and restore un-adjusted canvas draw settings

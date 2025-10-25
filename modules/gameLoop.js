@@ -58,24 +58,29 @@ const tick = () => {
     );
     if(updateCurrentPlanePos(plane) == 0){
       var index = live_planes.indexOf(plane);
+      var airportAIndex = currentAirports.indexOf(plane.airportA);
+      currentAirports.splice(airportAIndex,1);
+      var airportBIndex = currentAirports.indexOf(plane.airportB);
+      currentAirports.splice(airportBIndex,1);
       live_planes.splice(index,1);
+      score += 5
     }
 
   });
 
   currentAirports.forEach((airport) => {
-    
-    if (airport.type === "INCOMING") {
-      airport.flashed = !airport.flashed;
-      if (airport.flashed) { return; }
-    }
+    console.log(airport.flashed)
     placeAirport(
       gameArea.context,
       airport.location[0],
       airport.location[1],
       airport.colour,
-      airport.type
+      airport.flashed ? 6 : 4
     );
+
+    if (airport.type === "INCOMING") {
+      airport.flashed = !airport.flashed;
+    }
   });
 
   if (timer % Math.round(LEVELTIME / (level * 1.5)) == 0 || timer == 2) {
@@ -109,12 +114,22 @@ export function spawnMission() {
   createAirport(colour, "INCOMING"); // create recipient airport?
 }
 
+function cleanPath(path){
+  var clean = [];
+  for(let i = 0; i < path.length; i+=2){
+    var tempCoords = [path[i][1], path[i][2]];
+    clean.push(tempCoords);
+  }
+  console.log(clean);
+  return clean
+}
 export function verifyPaths(){
   for (pathCounter; pathCounter < pathcount; pathCounter++){
     var pathToVerify = pathsDic[pathCounter];
     verify(pathToVerify);
   }
 }
+
 
 export function verify(path){
   var startPoint = [path[1][0][1], path[1][0][2]];
@@ -140,7 +155,8 @@ export function verify(path){
             if (airportB.location[1] - endPoint[1] < LEEWAY && airportB.location[1] - endPoint[1] > -LEEWAY){
               console.log("END POINT IS VALID");
 
-              pathsArray.push(path[1]);
+              pathsArray.push(cleanPath(path[1]));
+              live_planes.push(createPlane(cleanPath(path[1]),airportA,airportB));
               return; 
             }
           }
