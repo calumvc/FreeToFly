@@ -1,5 +1,5 @@
 import { placePlane, placeAirport, placeBackground, placeExplosion } from "./helpRender.js";
-import { createAirport, currentAirports } from "./airport.js";
+import { createAirport, currentAirports, currentAirportNames } from "./airport.js";
 import { updateCurrentPlanePos, createPlane, checkCollision } from "./plane.js";
 import { gameArea } from "../main.js";
 
@@ -59,8 +59,10 @@ const tick = () => {
       var index = live_planes.indexOf(plane);
       var airportAIndex = currentAirports.indexOf(plane.airportA);
       currentAirports.splice(airportAIndex,1);
+      currentAirportNames.splice(airportAIndex,1);
       var airportBIndex = currentAirports.indexOf(plane.airportB);
       currentAirports.splice(airportBIndex,1);
+      currentAirportNames.splice(airportBIndex,1);
       live_planes.splice(index,1);
       score += 5;
     }
@@ -68,7 +70,7 @@ const tick = () => {
     var crash = checkCollision(live_planes);
     console.log("CRASSSH ", crash);
     if(crash != 0){
-      placeExplosion(live_planes[crash[0]].currentPos[0], live_planes[crash[0]].currentPos[1]);
+      placeExplosion(gameArea.context, live_planes[crash[0]].currentPos[0], live_planes[crash[0]].currentPos[1]);
       console.log("CRASH");
       gaming = false;
     }
@@ -90,15 +92,18 @@ const tick = () => {
 
     if(airport.type === "OUTGOING" && airport.inUse == true){
       currentAirports.splice(index,1);
+      currentAirportNames.splice(index,1);
     }
 
     if(airport.timeElapsed >= MAXAIRPORTTIME && airport.type === "OUTGOING"){
       currentAirports.splice(index,1);
+      currentAirportNames.splice(index,1);
       console.log("bleh");
     }
 
     if(airport.timeElapsed >=MAXAIRPORTTIME && airport.inUse == false){
       currentAirports.splice(index,1);
+      currentAirportNames.splice(index,1);
     }
 
     if (airport.type === "OUTGOING") {
