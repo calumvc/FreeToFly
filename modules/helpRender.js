@@ -1,15 +1,13 @@
-export default function placePlane(context, x, y, deg=0) {
+export function placePlane(context, x, y, deg=0) {
     return placeURL("./assets/plane.jpg", context, x, y, deg);
 }
-export function placeAirport(context, x, y) {
-    const radius = 20
+export function placeAirport(context, x, y, colour) {
+    const radius = 4
     context.beginPath();
     context.arc(x, y, radius, 0, 2 * Math.PI);
-    context.fillStyle = "red";
+    context.fillStyle = colour;
     context.fill();
     context.lineWidth = 4;
-    context.strokeStyle = "blue";
-    context.stroke();
 }
 
 export function placeURL(src, context, x, y, deg=0) {

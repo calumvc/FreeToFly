@@ -25,7 +25,7 @@ function checkCollision(planes){
         for(let j = 0; i < planes.length; i++){
             var distance = findDistance(plane1, plane2);
             if(distance <= MAX_DISTANCE_UNTIL_COLLISION){
-                return (i,j);
+                return [i,j];
             }
         };
     };
