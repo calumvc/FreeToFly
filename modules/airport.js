@@ -20,7 +20,7 @@ const airports = {
   Bangkok: [1372, 474],
   Frankfurt: [902, 281],
   Charlotte: [452, 353],
-  BuenosAires: [566,405],
+  BuenosAires: [566, 717],
 };
 
 export let currentAirports = [];
