@@ -102,6 +102,6 @@ window.addEventListener("DOMContentLoaded",(e)=>{
     pathcount++;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawValidPath();
+    //drawValidPath();
 })
 })

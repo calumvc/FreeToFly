@@ -59,7 +59,8 @@ export function createAirport(colour, type) {
     location: airports[airportName],
     colour: colour,
     type: type,
-    flashed: false
+    flashed: false,
+    timeElapsed: 0
   });
 
   currentAirportNames.push(airport.name);

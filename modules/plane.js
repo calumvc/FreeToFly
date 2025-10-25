@@ -1,3 +1,5 @@
+const MAX_DISTANCE_UNTIL_COLLISION = 10;
+
 export function createPlane(path,airportA,airportB){
     const plane = new Object({
         path: path,
@@ -28,7 +30,7 @@ export function updateCurrentPlanePos(plane){
 export function checkCollision(planes){
     for(let i = 0; i < planes.length; i++){
         for(let j = 0; i < planes.length; i++){
-            var distance = findDistance(plane1, plane2);
+            var distance = findDistance(planes[i], planes[j]);
             if(distance <= MAX_DISTANCE_UNTIL_COLLISION && i != j){
                 return [i,j];
             }
