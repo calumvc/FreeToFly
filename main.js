@@ -16,7 +16,7 @@ export var gameArea = {
             const x = e.clientX;
             const y = e.clientY;
 
-            alert(x + ", " + y);
+            console.log(x + ", " + y);
         });
 
     gameLoop();
