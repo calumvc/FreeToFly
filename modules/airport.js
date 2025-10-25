@@ -1,32 +1,32 @@
 const airports = {
-  Atlanta: (426, 624),
-  Dubai: (1044, 582),
-  Dallas: (373, 619),
-  Tokyo: (1444, 598),
-  London: (800, 720),
-  Istanbul: (924, 667),
-  Chicago: (413, 667),
-  Delhi: (1142, 598),
-  Shanghai: (1333, 619),
-  California: (271, 645),
-  Guangzhou: (1302, 571),
-  Seoul: (1360, 645),
-  Paris: (808, 704),
-  Singapore: (1257, 455),
-  Beijing: (1315, 656),
-  Amsterdam: (817, 725),
-  Madrid: (786, 661),
-  NewYork: (471, 661),
-  Bangkok: (1244, 518),
-  Frankfurt: (835, 714),
-  Charlotte: (444, 635),
-  LasVegas: (288, 640),
-  KualaLumpur: (1248, 465),
+  Atlanta: [426, 900-624],
+  Dubai: [1044, 900-582],
+  Dallas: [373, 900-619],
+  Tokyo: [1444, 900-598],
+  London: [800, 900-720],
+  Istanbul: [924, 900-667],
+  Chicago: [413, 900-667],
+  Delhi: [1142, 900-598],
+  Shanghai: [1333, 900-619],
+  California: [271, 900-645],
+  Guangzhou: [1302, 900-571],
+  Seoul: [1360, 900-645],
+  Paris: [808, 900-704],
+  Singapore: [1257, 900-455],
+  Beijing: [1315, 900-656],
+  Amsterdam: [817, 900-725],
+  Madrid: [786, 900-661],
+  NewYork: [471, 900-661],
+  Bangkok: [1244, 900-518],
+  Frankfurt: [835, 900-714],
+  Charlotte: [444, 900-635],
+  LasVegas: [288, 900-640],
+  KualaLumpur: [1248, 900-465],
 };
 
-let currentAirports = [];
+export let currentAirports = [];
 
-function createAirport(colour) {
+export function createAirport(colour) {
   const airportKeys = Object.keys(airports);
   if (airportKeys.length == currentAirports.length) {
     console.log("U tried to make a new airport but we dont have that many :p");
@@ -47,6 +47,7 @@ function createAirport(colour) {
     colour: colour,
   });
 
-  currentAirports.push(airport.name);
+  console.log(airport.location);
+  currentAirports.push(airport);
   return airport;
 }
