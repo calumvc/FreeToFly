@@ -28,6 +28,10 @@ let currentAirports = [];
 
 function createAirport(colour) {
   const airportKeys = Object.keys(airports);
+  if (airportKeys.length == currentAirports.length) {
+    console.log("U tried to make a new airport but we dont have that many :p");
+    return;
+  }
   let airportName;
   let randInt;
 

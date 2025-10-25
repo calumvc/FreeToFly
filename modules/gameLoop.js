@@ -1,8 +1,14 @@
+import placePlane from "./helpRender.js"; 
+import "./plane.js";
+
 var timer = 1; // game timer
 var score = 0; // user's score
 var gaming; // boolean for alive
 var level = 1;
+var canvas = document.getElementById("canvas")
 const LEVELTIME = 20;
+var live_planes = [];
+var live_airports = [];
 
 export default function gameLoop(){
 
@@ -17,7 +23,15 @@ const tick = () => {
     return;
   }
 
-  if ((timer % (LEVELTIME / (level * 2)) == 0) || (timer == 2)){
+  live_planes.forEach(plane => {
+    placePlane(canvas, plane.CurrentPos[0], plane.CurrentPos[1], plane.rotation);
+  });
+
+  live_airports.forEach(airport => {
+    placeAirport(canvas, airport.location[0], airport.location[1]);
+  });
+
+    if ((timer % Math.round((LEVELTIME / (level * 1.5))) == 0) || (timer == 2)){ // logic to spawn planes, increasing as the level increments{
     spawnMission();
   }
 

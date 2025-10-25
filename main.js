@@ -1,5 +1,5 @@
 //might add another event listener to start game in the future
-import gameLoop from "./gameLoop.js";
+import gameLoop from "./modules/gameLoop.js";
 
 var gameArea = {
   canvas : document.createElement("canvas"),
