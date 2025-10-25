@@ -1,4 +1,4 @@
-export default function placePlane(context, x, y, deg=0) {
+export function placePlane(context, x, y, deg=0) {
     return placeURL("./assets/plane.jpg", context, x, y, deg);
 }
 export function placeAirport(context, x, y) {
