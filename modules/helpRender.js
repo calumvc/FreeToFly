@@ -11,6 +11,7 @@ let imgObj = (() => {
 })();
 
 export function placePlane(context, x, y, deg=0) {
+    console.log(deg);
     return placeURL("./assets/plane.png", context, x, y, deg);
 }
 export function placeAirport(context, x, y, colour) {

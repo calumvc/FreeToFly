@@ -4,6 +4,7 @@ export function createPlane(path){
         currentPos: path[0],
         rotation: 0,
     });
+    plane.rotation = calcRotation(plane);
     return plane;
 }
 
@@ -39,10 +40,14 @@ function findDistance(plane1, plane2){
 }
 
 function calcRotation(plane){
-    var rotation = 0;
-    var index = plane.path.indexOf(plane.currentPos)
+    var index = plane.path.indexOf(plane.currentPos);
+    if(index == plane.path.length-1){
+        return 0;
+    }
     var xDiff = plane.path[index+1][0] - plane.path[index][0];
     var yDiff = plane.path[index+1][1] - plane.path[index][1];
+    console.log(xDiff);
+    console.log(yDiff);
     if(yDiff == 0 && xDiff > 0){
         return 90;
     }
@@ -56,13 +61,16 @@ function calcRotation(plane){
         return 0;
     }
     else if(xDiff > 0 && yDiff < 0){
-        return Math.atan(yDiff/xDiff) + 90;
+        return (Math.atan(yDiff/xDiff)*180/Math.PI) + 90;
     }
-    else if(xDiff < 0 && yDiff < 0){
-        return Math.atan(yDiff/xDiff) + 180;
+    else if(xDiff > 0 && yDiff > 0){
+        return ((Math.atan(yDiff/xDiff)*180/Math.PI) + 90);
     }
     else if(xDiff < 0 && yDiff > 0){
-        return Math.atan(yDiff/xDiff) + 270;
+        return ((Math.atan(yDiff/xDiff)*180/Math.PI) + 270);
+    }
+    else if(xDiff < 0 && yDiff < 0){
+        return ((Math.atan(yDiff/xDiff)*180/Math.PI) + 270);
     }
     else{
         return 0;

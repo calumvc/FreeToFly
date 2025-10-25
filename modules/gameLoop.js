@@ -10,6 +10,7 @@ var level = 1;
 const LEVELTIME = 20;
 var live_planes = [];
 var pathCounter = 0;
+var pathsArray = [];
 
 var colours = [
   "Blue",
@@ -25,7 +26,7 @@ var colours = [
 ];
 
 export default function gameLoop() {
-  setInterval(tick, 1000);
+  setInterval(tick, 200);
 }
 
 const tick = () => {
@@ -97,12 +98,22 @@ export function spawnMission() {
   createAirport(colour, "INCOMING"); // create recipient airport?
 }
 
+function cleanPath(path){
+  var clean = [];
+  for(let i = 0; i < path.length; i+=2){
+    var tempCoords = [path[i][1], path[i][2]];
+    clean.push(tempCoords);
+  }
+  console.log(clean);
+  return clean
+}
 export function verifyPaths(){
   for (pathCounter; pathCounter < pathcount; pathCounter++){
     var pathToVerify = pathsDic[pathCounter];
     verify(pathToVerify);
   }
 }
+
 
 export function verify(path){
   var startPoint = [path[1][0][1], path[1][0][2]];
@@ -115,9 +126,11 @@ export function verify(path){
   console.log("END POINT -> ", endPoint);
 
   console.log("PATH", path[1]); // FOR PLANE DEBUGGING
-  return path[1];
+  pathsArray.push(cleanPath(path[1]));
+  live_planes.push(createPlane(cleanPath(path[1])));
 
 }
+
 
 export function spawnAirport() {}
 
