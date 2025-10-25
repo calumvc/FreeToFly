@@ -64,18 +64,18 @@ const tick = () => {
   });
 
   currentAirports.forEach((airport) => {
-    
-    if (airport.type === "INCOMING") {
-      airport.flashed = !airport.flashed;
-      if (airport.flashed) { return; }
-    }
+    console.log(airport.flashed)
     placeAirport(
       gameArea.context,
       airport.location[0],
       airport.location[1],
       airport.colour,
-      airport.type
+      airport.flashed ? 6 : 4
     );
+
+    if (airport.type === "INCOMING") {
+      airport.flashed = !airport.flashed;
+    }
   });
 
   if (timer % Math.round(LEVELTIME / (level * 1.5)) == 0 || timer == 2) {

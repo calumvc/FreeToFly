@@ -14,8 +14,7 @@ export function placePlane(context, x, y, deg=0) {
     console.log(deg);
     return placeURL("./assets/plane.png", context, x, y, deg);
 }
-export function placeAirport(context, x, y, colour) {
-    const radius = 4
+export function placeAirport(context, x, y, colour, radius=4) {
     context.beginPath();
     context.arc(x, y, radius, 0, 2 * Math.PI);
     context.fillStyle = colour;
