@@ -14,16 +14,21 @@ var pathCounter = 0;
 var pathsArray = [];
 
 var colours = [
-  "Blue",
-  "Red",
-  "Cyan",
-  "Pink",
-  "Purple",
-  "Green",
-  "Yellow",
-  "Orange",
-  "Lime",
-  "Navy",
+  "rgb(220,25,0)",
+  "rgba(8, 82, 193, 1)",
+  "rgba(230, 114, 168, 1)",
+  "rgba(141, 14, 183, 1)",
+  "rgba(3, 120, 59, 1)",
+  "rgba(230, 179, 13, 1)",
+  "rgba(255, 126, 6, 1)",
+  "rgba(48, 174, 56, 1)",
+  "rgba(116, 81, 42, 1)",
+  "rgba(22, 170, 181, 1)",
+  "rgba(0, 5, 97, 1)",
+  "rgba(126, 4, 2, 1)",
+  "rgba(70, 78, 77, 1)",
+  "rgba(129, 145, 5, 1)",
+  "rgba(153, 121, 210, 1)",
 ];
 
 export default function gameLoop() {
