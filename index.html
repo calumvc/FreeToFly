@@ -12,7 +12,14 @@
     position:absolute;
     left:0px;
     top:0px;
-    z-index: 1;
+    z-index: 2;
+  }
+  .planeCanvas {
+    position:absolute;
+    left:0px;
+    top:0px;
+    z-index: 3;
+    pointer-events: none;
   }
   </style>
 </head>
@@ -21,5 +28,6 @@
   <script type="module" src="main.js"></script>
   <script src="modules/pathtrack.js"></script>
   <canvas id = "canvasPath" width="1920" height="1080"></canvas>
+  <!-- <canvas id = "canvasPlanes" width="1920" height="1080"></canvas> -->
 </body>
 </html>

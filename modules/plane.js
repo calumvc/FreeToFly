@@ -1,3 +1,16 @@
+function makePlaneLayer()
+{
+    let canv = document.createElement("canvas");
+    canv.width = 1920;
+    canv.height = 1080;
+    canv.className = "planeCanvas";
+    document.getElementById("canvasPath").insertAdjacentElement("afterend", canv)
+    canv.getContext("2d").globalCompositeOperation = 'copy';
+    console.log("here canv")
+    console.log(canv)
+    return canv;
+}
+
 export function createPlane(path,airportA,airportB){
     const plane = new Object({
         path: path,
@@ -5,6 +18,7 @@ export function createPlane(path,airportA,airportB){
         rotation: 0,
         airportA: airportA,
         airportB: airportB,
+        layerCanvasContext: makePlaneLayer().getContext("2d")
     });
     plane.rotation = calcRotation(plane);
     return plane;

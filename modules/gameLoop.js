@@ -1,4 +1,4 @@
-import { placePlane, placeAirport, placeBackground } from "./helpRender.js";
+import { placePlane, slidePlane, placeAirport, placeBackground } from "./helpRender.js";
 import { createAirport, currentAirports } from "./airport.js";
 import { updateCurrentPlanePos, createPlane } from "./plane.js";
 import { gameArea } from "../main.js";
@@ -12,6 +12,9 @@ const LEEWAY = 20;
 var live_planes = [];
 var pathCounter = 0;
 var pathsArray = [];
+
+// const planesContext = document.getElementById('canvasPlanes').getContext('2d');
+// planesContext.globalCompositeOperation = 'copy';
 
 var colours = [
   "Blue",
@@ -28,6 +31,7 @@ var colours = [
 
 export default function gameLoop() {
   setInterval(tick, 1000);
+  // setInterval(tick, 1000/60);
 }
 
 const tick = () => {
@@ -45,12 +49,34 @@ const tick = () => {
   placeBackground(gameArea.context);
 
   live_planes.forEach((plane) => {
-    placePlane(
-      gameArea.context,
-      plane.currentPos[0],
-      plane.currentPos[1],
-      plane.rotation
-    );
+    
+    let now = (new Date()).getTime();
+    let pathPosIndex = plane.path.indexOf(plane.currentPos);
+
+    if (pathPosIndex < plane.path.length-1)
+    {
+        slidePlane(
+            // gameArea.context,
+            plane.layerCanvasContext,
+            plane.path[pathPosIndex][0],
+            plane.path[pathPosIndex][1],
+            plane.path[pathPosIndex+1][0],
+            plane.path[pathPosIndex+1][1],
+            now,
+            now+1000, // 1000ms tick period.. i.e. the animation ends in time for next tick
+            plane.rotation
+        );
+    }
+    else if (false)
+    {
+        placePlane(
+            gameArea.context,
+            plane.currentPes[0],
+            plane.currentPos[1],
+            plane.rotation
+        );
+    }
+
     if(updateCurrentPlanePos(plane) == 0){
       var index = live_planes.indexOf(plane);
       var airportAIndex = currentAirports.indexOf(plane.airportA);
@@ -59,6 +85,8 @@ const tick = () => {
       currentAirports.splice(airportBIndex,1);
       live_planes.splice(index,1);
       score += 5
+
+      plane.layerCanvasContext.canvas.remove()
     }
 
   });
