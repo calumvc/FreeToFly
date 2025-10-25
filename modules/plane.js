@@ -1,3 +1,5 @@
+const MAX_DISTANCE_UNTIL_COLLISION = 10;
+
 function makePlaneLayer()
 {
     let canv = document.createElement("canvas");
@@ -39,10 +41,10 @@ export function updateCurrentPlanePos(plane){
     return 1;
 }
 
-function checkCollision(planes){
+export function checkCollision(planes){
     for(let i = 0; i < planes.length; i++){
         for(let j = 0; i < planes.length; i++){
-            var distance = findDistance(plane1, plane2);
+            var distance = findDistance(planes[i], planes[j]);
             if(distance <= MAX_DISTANCE_UNTIL_COLLISION && i != j){
                 return [i,j];
             }
@@ -62,8 +64,8 @@ function calcRotation(plane){
     }
     var xDiff = plane.path[index+1][0] - plane.path[index][0];
     var yDiff = plane.path[index+1][1] - plane.path[index][1];
-    console.log(xDiff);
-    console.log(yDiff);
+    // console.log(xDiff);
+    // console.log(yDiff);
     if(yDiff == 0 && xDiff > 0){
         return 90;
     }

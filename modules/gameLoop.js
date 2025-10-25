@@ -1,6 +1,6 @@
-import { placePlane, slidePlane, placeAirport, placeBackground } from "./helpRender.js";
-import { createAirport, currentAirports } from "./airport.js";
-import { updateCurrentPlanePos, createPlane } from "./plane.js";
+import { placePlane, slidePlane, placeAirport, placeBackground, placeExplosion } from "./helpRender.js";
+import { createAirport, currentAirports, currentAirportNames } from "./airport.js";
+import { updateCurrentPlanePos, createPlane, checkCollision } from "./plane.js";
 import { gameArea } from "../main.js";
 
 var timer = 1; // game timer
@@ -9,6 +9,8 @@ var gaming; // boolean for alive
 var level = 1;
 const LEVELTIME = 20;
 const LEEWAY = 20;
+const GAMETIME = 300;
+const MAXAIRPORTTIME = 30;
 var live_planes = [];
 var pathCounter = 0;
 var pathsArray = [];
@@ -17,16 +19,21 @@ var pathsArray = [];
 // planesContext.globalCompositeOperation = 'copy';
 
 var colours = [
-  "Blue",
-  "Red",
-  "Cyan",
-  "Pink",
-  "Purple",
-  "Green",
-  "Yellow",
-  "Orange",
-  "Lime",
-  "Navy",
+  "rgb(220,25,0)",
+  "rgba(8, 82, 193, 1)",
+  "rgba(230, 114, 168, 1)",
+  "rgba(141, 14, 183, 1)",
+  "rgba(3, 120, 59, 1)",
+  "rgba(230, 179, 13, 1)",
+  "rgba(255, 126, 6, 1)",
+  "rgba(48, 174, 56, 1)",
+  "rgba(116, 81, 42, 1)",
+  "rgba(22, 170, 181, 1)",
+  "rgba(0, 5, 97, 1)",
+  "rgba(126, 4, 2, 1)",
+  "rgba(70, 78, 77, 1)",
+  "rgba(129, 145, 5, 1)",
+  "rgba(153, 121, 210, 1)",
 ];
 
 export default function gameLoop() {
@@ -42,9 +49,7 @@ const tick = () => {
     return;
   }
   
-  // console.log(pathcount);
-  // console.log(pathCounter);
-  verifyPaths();
+  verifyPaths(); // verifies all line strokes in the queue, 
 
   placeBackground(gameArea.context);
 
@@ -81,18 +86,28 @@ const tick = () => {
       var index = live_planes.indexOf(plane);
       var airportAIndex = currentAirports.indexOf(plane.airportA);
       currentAirports.splice(airportAIndex,1);
+      currentAirportNames.splice(airportAIndex,1);
       var airportBIndex = currentAirports.indexOf(plane.airportB);
       currentAirports.splice(airportBIndex,1);
+      currentAirportNames.splice(airportBIndex,1);
       live_planes.splice(index,1);
       score += 5
 
       plane.layerCanvasContext.canvas.remove()
     }
 
+    var crash = checkCollision(live_planes);
+    console.log("CRASSSH ", crash);
+    if(crash != 0){
+      placeExplosion(gameArea.context, live_planes[crash[0]].currentPos[0], live_planes[crash[0]].currentPos[1]);
+      console.log("CRASH");
+      gaming = false;
+    }
+
   });
 
   currentAirports.forEach((airport) => {
-    console.log(airport.flashed)
+    // console.log(airport.flashed)
     placeAirport(
       gameArea.context,
       airport.location[0],
@@ -100,8 +115,27 @@ const tick = () => {
       airport.colour,
       airport.flashed ? 6 : 4
     );
+    airport.timeElapsed += 1;
 
-    if (airport.type === "INCOMING") {
+    var index = currentAirports.indexOf(airport);
+
+    if(airport.type === "OUTGOING" && airport.inUse == true){
+      currentAirports.splice(index,1);
+      currentAirportNames.splice(index,1);
+    }
+
+    if(airport.timeElapsed >= MAXAIRPORTTIME && airport.type === "OUTGOING"){
+      currentAirports.splice(index,1);
+      currentAirportNames.splice(index,1);
+      console.log("bleh");
+    }
+
+    if(airport.timeElapsed >=MAXAIRPORTTIME && airport.inUse == false){
+      currentAirports.splice(index,1);
+      currentAirportNames.splice(index,1);
+    }
+
+    if (airport.type === "OUTGOING") {
       airport.flashed = !airport.flashed;
     }
   });
@@ -111,15 +145,14 @@ const tick = () => {
     spawnMission();
   }
 
-  console.log(timer);
+  console.log("Timer :", timer);
   if (timer % LEVELTIME == 0) {
     level++;
-    console.log("Level incremented");
-    console.log(level);
+    console.log("Level :", level);
   }
   timer++;
 
-  if (timer === 120) {
+  if (timer === GAMETIME) {
     gaming = false;
   }
 };
@@ -143,7 +176,7 @@ function cleanPath(path){
     var tempCoords = [path[i][1], path[i][2]];
     clean.push(tempCoords);
   }
-  console.log(clean);
+  // console.log(clean);
   return clean
 }
 export function verifyPaths(){
@@ -153,8 +186,10 @@ export function verifyPaths(){
   }
 }
 
-
 export function verify(path){
+  if (path[1][0] === undefined){
+    return;
+  }
   var startPoint = [path[1][0][1], path[1][0][2]];
   var endPointReference = path[1];
   var endPointLength = endPointReference.length-1;
@@ -178,6 +213,9 @@ export function verify(path){
             if (airportB.location[1] - endPoint[1] < LEEWAY && airportB.location[1] - endPoint[1] > -LEEWAY){
               console.log("END POINT IS VALID");
 
+              airportA.inUse = true;
+              airportB.inUse = true;
+              
               pathsArray.push(cleanPath(path[1]));
               live_planes.push(createPlane(cleanPath(path[1]),airportA,airportB));
               return; 
