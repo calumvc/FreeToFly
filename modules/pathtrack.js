@@ -1,5 +1,5 @@
 window.addEventListener("DOMContentLoaded",(e)=>{
-    const canvas = document.getElementById('canvas');
+    const canvas = document.getElementById('canvasPath');
     const ctx = canvas.getContext('2d');
     var record = [];
     var flag = 0;

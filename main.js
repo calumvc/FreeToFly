@@ -9,6 +9,7 @@ export var gameArea = {
     this.canvas.height = 1080;
     this.canvas.id = "canvas";
     this.context = this.canvas.getContext("2d");
+    this.canvas.style = "position:absolute; left:50; top:50; z-index:0;"
     placeURL("./assets/world_map.png", this.context, 0, 0);
     document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 
