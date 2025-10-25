@@ -1,6 +1,6 @@
 //might add another event listener to start game in the future
 import gameLoop from "./modules/gameLoop.js";
-import { placeURL } from "./modules/helpRender.js";
+import { placeBackground } from "./modules/helpRender.js";
 
 export var gameArea = {
   canvas : document.createElement("canvas"),
@@ -10,7 +10,7 @@ export var gameArea = {
     this.canvas.id = "canvas";
     this.context = this.canvas.getContext("2d");
     this.canvas.style = "position:absolute; left:0; top:0; z-index:0;"
-    placeURL("./assets/world_map.png", this.context, 0, 0);
+    placeBackground(this.context);
     document.body.insertBefore(this.canvas, document.body.childNodes[0]);
 
     canvas.addEventListener('click', (e) => {
@@ -19,7 +19,6 @@ export var gameArea = {
 
             console.log(x + ", " + y);
         });
-
     gameLoop();
   }
 }

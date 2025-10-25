@@ -1,6 +1,6 @@
-import { placePlane, placeAirport } from "./helpRender.js";
+import { placePlane, placeAirport, placeBackground } from "./helpRender.js";
 import { createAirport, currentAirports } from "./airport.js";
-import { updateCurrentPlanePos } from "./plane.js";
+import { updateCurrentPlanePos, createPlane } from "./plane.js";
 import { gameArea } from "../main.js";
 
 var timer = 1; // game timer
@@ -9,6 +9,7 @@ var gaming; // boolean for alive
 var level = 1;
 const LEVELTIME = 20;
 var live_planes = [];
+var pathCounter = 0;
 
 var colours = [
   "Blue",
@@ -34,15 +35,25 @@ const tick = () => {
     gameOver();
     return;
   }
+  
+  // console.log(pathcount);
+  // console.log(pathCounter);
+  verifyPaths();
+
+  placeBackground(gameArea.context);
 
   live_planes.forEach((plane) => {
     placePlane(
       gameArea.context,
-      plane.CurrentPos[0],
-      plane.CurrentPos[1],
+      plane.currentPos[0],
+      plane.currentPos[1],
       plane.rotation
     );
-    updateCurrentPlanePos(plane);
+    if(updateCurrentPlanePos(plane) == 0){
+      var index = live_planes.indexOf(plane);
+      live_planes.splice(index,1);
+    }
+
   });
 
   currentAirports.forEach((airport) => {
@@ -56,7 +67,7 @@ const tick = () => {
   });
 
   if (timer % Math.round(LEVELTIME / (level * 1.5)) == 0 || timer == 2) {
-    // logic to spawn planes, increasing as the level increments{
+    // logic to spawn planes, increasing as the level increments
     spawnMission();
   }
 
@@ -84,6 +95,28 @@ export function spawnMission() {
   colours.shift();
   createAirport(colour, "OUTGOING"); // create sender airport?
   createAirport(colour, "INCOMING"); // create recipient airport?
+}
+
+export function verifyPaths(){
+  for (pathCounter; pathCounter < pathcount; pathCounter++){
+    var pathToVerify = pathsDic[pathCounter];
+    verify(pathToVerify);
+  }
+}
+
+export function verify(path){
+  var startPoint = [path[1][0][1], path[1][0][2]];
+  
+  console.log("START POINT -> ", startPoint);
+  var endPointReference = path[1]
+  var endPointLength = endPointReference.length-1;
+  var endPoint = [path[1][endPointLength][1], path[1][endPointLength][2]];
+
+  console.log("END POINT -> ", endPoint);
+
+  console.log("PATH", path[1]); // FOR PLANE DEBUGGING
+  return path[1];
+
 }
 
 export function spawnAirport() {}
