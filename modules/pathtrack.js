@@ -35,7 +35,7 @@ window.addEventListener("DOMContentLoaded",(e)=>{
     currentY = event.clientY;
     lastX = lastpos[0];
     lastY = lastpos[1];
-    if ((currentX - lastX)**2 + (currentY - lastY)**2 > 600){ // modify the number to determine the distance between path dots
+    if ((currentX - lastX)**2 + (currentY - lastY)**2 > 60){ // modify the number to determine the distance between path dots
         return 1;
     }else {
         return 0;
@@ -45,7 +45,7 @@ window.addEventListener("DOMContentLoaded",(e)=>{
     function drawdot(x,y){
         ctx.beginPath();
         ctx.fillStyle = "grey";
-        ctx.arc(x,y,3,0,2*Math.PI); //3 is the radius in case you wanna change
+        ctx.arc(x,y,2,0,2*Math.PI); // 2 is the radius in case you wanna change
         ctx.fill();
         ctx.closePath();
         currentPath.push(["dot",x,y,3,0,2*Math.PI]);

@@ -7,8 +7,8 @@ function createPlane(path){
     return plane;
 }
 
-function getCurrentPlanePos(plane){
-    return plane.currentPos;
+function getCurrentPlanePos(plane) {
+  return plane.currentPos;
 }
 
 //returns 0 if plane has completed its path, 1 otherwise 
