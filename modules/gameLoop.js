@@ -32,7 +32,7 @@ var colours = [
 ];
 
 export default function gameLoop() {
-  setInterval(tick, 1000);
+  setInterval(tick, 200);
 }
 
 const tick = () => {
