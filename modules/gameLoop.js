@@ -46,7 +46,6 @@ const tick = () => {
   if (gaming === false) {
     // if player dies
     clearInterval();
-    gameOver();
     return;
   }
 
@@ -99,14 +98,14 @@ const tick = () => {
     if(updateCurrentPlanePos(plane) == 0){
       var index = live_planes.indexOf(plane);
       var airportAIndex = currentAirports.indexOf(plane.airportA);
-      currentAirports.splice(airportAIndex,1);
-      currentAirportNames.splice(airportAIndex,1);
+      //currentAirports.splice(airportAIndex,1);
+      //currentAirportNames.splice(airportAIndex,1);
       var airportBIndex = currentAirports.indexOf(plane.airportB);
       pastNote = currentNote;
       currentNote = "Flight from " + plane.airportA.name + " to " + plane.airportB.name + " reached its destination safely! (+5 points)";
       pastNoteIndex = currentNoteIndex;
       currentNoteIndex = 2;
-      currentAirports.splice(airportAIndex,1);
+      //currentAirports.splice(airportAIndex,1);
       currentAirports.splice(airportBIndex,1);
       currentAirportNames.splice(airportBIndex,1);
       live_planes.splice(index,1);
