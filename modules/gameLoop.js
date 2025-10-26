@@ -1,4 +1,4 @@
-import { placePlane, slidePlane, placeAirport, placeBackground, placeExplosion } from "./helpRender.js";
+import { placePlane, slidePlane, placeAirport, placeBackground, placeErrorImg, placeExplosion } from "./helpRender.js";
 import { createAirport, currentAirports, currentAirportNames } from "./airport.js";
 import { updateCurrentPlanePos, createPlane, checkCollision } from "./plane.js";
 import { gameArea } from "../main.js";
@@ -54,6 +54,7 @@ const tick = () => {
   verifyPaths(); // verifies all line strokes in the queue, 
 
   placeBackground(gameArea.context);
+  placeErrorImg(gameArea.context);
 
   live_planes.forEach((plane) => {
     
