@@ -2,7 +2,7 @@
 
 ## A simple game for 404 pages
 
-Created for FreeToBooks Hackathon Challenge at *Do You Have The Guts 2025*
+Created for FreeToBooks Hackthon Challenge at *Do You Have The Guts 2025*
 
 ## ![Plane](./assets/plane.png) Testing
 
