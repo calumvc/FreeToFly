@@ -7,7 +7,7 @@ var timer = 1; // game timer
 var score = 0; // user's score
 var gaming; // boolean for alive
 var level = 1;
-const LEVELTIME = 20;
+const LEVELTIME = 40;
 const LEEWAY = 20;
 const GAMETIME = 300;
 const MAXAIRPORTTIME = 30;
@@ -93,7 +93,7 @@ const tick = () => {
       currentNote = "There was a crash! " + live_planes[crash[0]].name + " and " + live_planes[crash[1]].name + " collided!";
       pastNoteIndex = currentNoteIndex;
       currentNoteIndex = 1;
-      console.log("CRASH");
+      // console.log("CRASH");
       gaming = false;
       gameOver();
       return;
@@ -160,10 +160,10 @@ const tick = () => {
     // logic to spawn planes, increasing as the level increments
     spawnMission(); }
 
-  console.log("Timer :", timer);
+  // console.log("Timer :", timer);
   if (timer % LEVELTIME == 0 && level < 5) {
     level++;
-    console.log("Level :", level);
+    // console.log("Level :", level);
   }
   timer++;
 
@@ -287,7 +287,7 @@ export function verify(path){
     if (currentAirports[k].type === "OUTGOING"){
       if (currentAirports[k].location[0] - startPoint[0] < LEEWAY && currentAirports[k].location[0] - startPoint[0] > -LEEWAY){
         if (currentAirports[k].location[1] - startPoint[1] < LEEWAY && currentAirports[k].location[1] - startPoint[1] > -LEEWAY){
-          console.log("START POINT IS VALID");
+          // console.log("START POINT IS VALID");
           var airportA = currentAirports[k];
 
           var airportB;
@@ -299,7 +299,7 @@ export function verify(path){
 
           if (airportB.location[0] - endPoint[0] < LEEWAY && airportB.location[0] - endPoint[0] > -LEEWAY){
             if (airportB.location[1] - endPoint[1] < LEEWAY && airportB.location[1] - endPoint[1] > -LEEWAY){
-              console.log("END POINT IS VALID");
+              // console.log("END POINT IS VALID");
 
               airportA.inUse = true;
               airportB.inUse = true;

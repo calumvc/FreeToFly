@@ -9,8 +9,8 @@ function makePlaneLayer()
     canv.className = "planeCanvas";
     document.getElementById("canvasPath").insertAdjacentElement("afterend", canv)
     canv.getContext("2d").globalCompositeOperation = 'copy';
-    console.log("here canv")
-    console.log(canv)
+    // console.log("here canv")
+    // console.log(canv)
     return canv;
 }
 
@@ -43,7 +43,7 @@ export function updateCurrentPlanePos(plane){
 }
 
 export function checkCollision(planes){
-    console.log(planes)
+    // console.log(planes)
     for(let i = 0; i < planes.length; i++){
         for(let j = 1; j < planes.length; j++){
             var distance = findDistance(planes[i], planes[j]);
@@ -61,7 +61,7 @@ function findDistance(plane1, plane2){
     let plane1PosY = plane1.currentPos[1]
     let plane2PosY = plane2.currentPos[1]
     let dist = Math.sqrt(Math.abs(plane1PosX - plane2PosX)**2 + Math.abs(plane1PosY - plane2PosY))**2;
-    console.log("dist:", dist)
+    // console.log("dist:", dist)
     return dist
 }
 
