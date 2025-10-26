@@ -13,6 +13,7 @@ canvas {
     position:absolute;
     left:50%;
     top:50%;
+    z-index:2;
     transform: translate(-50%,-50%);
     background-color: rgba(69, 137, 215,0.7);
     border: 6px solid rgba(255, 167, 78);

@@ -5,6 +5,7 @@ function makePlaneLayer()
     let canv = document.createElement("canvas");
     canv.width = 1920;
     canv.height = 1080;
+    canv.style.zIndex = 0;
     canv.className = "planeCanvas";
     document.getElementById("canvasPath").insertAdjacentElement("afterend", canv)
     canv.getContext("2d").globalCompositeOperation = 'copy';
