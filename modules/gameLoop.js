@@ -24,18 +24,18 @@ var colours = [
   "rgb(220,25,0)",
   "rgba(8, 82, 193, 1)",
   "rgba(230, 114, 168, 1)",
-  "rgba(141, 14, 183, 1)",
-  "rgba(3, 120, 59, 1)",
+  "rgba(123, 3, 163, 1)",
+  "rgba(0, 96, 47, 1)",
   "rgba(230, 179, 13, 1)",
   "rgba(255, 126, 6, 1)",
-  "rgba(48, 174, 56, 1)",
-  "rgba(116, 81, 42, 1)",
+  "rgba(61, 193, 70, 1)",
+  "rgba(148, 79, 0, 1)",
   "rgba(22, 170, 181, 1)",
-  "rgba(0, 5, 97, 1)",
-  "rgba(126, 4, 2, 1)",
-  "rgba(70, 78, 77, 1)",
-  "rgba(129, 145, 5, 1)",
-  "rgba(153, 121, 210, 1)",
+  "rgba(0, 6, 126, 1)",
+  "rgba(145, 27, 25, 1)",
+  "rgba(105, 105, 105, 1)",
+  "rgba(172, 180, 117, 1)",
+  "rgba(166, 137, 216, 1)",
 ];
 
 export default function gameLoop() {
@@ -87,8 +87,8 @@ const tick = () => {
     }
     var crash = checkCollision(live_planes);
     if(crash != 0){
-      placeExplosion(document.getElementById("canvasPath").getContext("2d"), live_planes[crash[0]].currentPos[0]-16, live_planes[crash[0]].currentPos[1]-16);
-      placeExplosion(document.getElementById("canvasPath").getContext("2d"), live_planes[crash[1]].currentPos[0]-16, live_planes[crash[1]].currentPos[1]-16);
+      placeExplosion(document.getElementById("canvasCollision").getContext("2d"), live_planes[crash[0]].currentPos[0]-16, live_planes[crash[0]].currentPos[1]-16);
+      placeExplosion(document.getElementById("canvasCollision").getContext("2d"), live_planes[crash[1]].currentPos[0]-16, live_planes[crash[1]].currentPos[1]-16);
       pastNote = currentNote;
       currentNote = "There was a crash! " + live_planes[crash[0]].name + " and " + live_planes[crash[1]].name + " collided!";
       pastNoteIndex = currentNoteIndex;
