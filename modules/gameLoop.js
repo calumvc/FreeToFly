@@ -73,6 +73,9 @@ const tick = () => {
     let now = (new Date()).getTime();
     let pathPosIndex = plane.path.indexOf(plane.currentPos);
 
+    // for (var pos of plane.path)
+    // { drawdot(pos[0], pos[1]); }
+
     if (pathPosIndex < plane.path.length-1)
     {
         slidePlane(
@@ -236,48 +239,59 @@ export function spawnMission() {
   }
 }
 
-const thresholdUpper = 20
-const thresholdLower = 10
-function cleanPath(path){
-  var clean = [];
-  
-  /*
-  var nextTempCoords
-  for(let i = 0; i < path.length-2; i+=2){
-    var tempCoords = [path[i][1], path[i][2]];
-    nextTempCoords = [path[i+2][1], path[i+2][2]];
+function drawdot(x, y) {
+    let ctx = gameArea.context;
+    ctx.beginPath();
+    ctx.fillStyle = "red";
+    ctx.arc(x, y, 2, 0, 2 * Math.PI); // 2 is the radius in case you wanna change
+    ctx.fill();
+    ctx.closePath();
+}
 
-    var xDiff = nextTempCoords[0]-tempCoords[0]
-    var yDiff = nextTempCoords[1]-tempCoords[1]
-    var segLen = Math.sqrt((xDiff)**2 + (yDiff)**2)
+const threshold = 20
+function cleanPath(path){
+  var clean = [path[0][1], path[0][2]];
+  
+  for(let i = 2; i < path.length-2; i+=2){
+    var prevTempCoords = clean[clean.length-1];
+    var tempCoords = [path[i][1], path[i][2]];
+    var nextTempCoords = [path[i+2][1], path[i+2][2]];
+
+    var nextDx = nextTempCoords[0] - tempCoords[0]
+    var nextDy = nextTempCoords[1] - tempCoords[1]
+    var nxtSegLen = Math.sqrt((nextDx)**2 + (nextDy)**2)
+
+    var prevDx = tempCoords[0] - prevTempCoords[0]
+    var prevDy = tempCoords[1] - prevTempCoords[1]
+    var prevSegLen = Math.sqrt((prevDx)**2 + (prevDy)**2)
 
     // if dist to next point is longer than we'd want..
-    if (segLen > thresholdUpper)
+    
+    if (nxtSegLen > threshold)
     {
       // find how many sub-segments we want
-      let divCount = segLen / thresholdUpper
-      let xComponent = xDiff / divCount
-      let yComponent = yDiff / divCount
+      let divCount = nxtSegLen / threshold
+      let xComponent = nextDx / divCount
+      let yComponent = nextDy / divCount
 
       // start at the segment origin, and slowly push the segment in smaller chunks
       for (let d = 0 ; d < divCount ; d++)
         clean.push([tempCoords[0]+d*xComponent, tempCoords[1]+d*yComponent])
     }
-    else if (segLen < thresholdLower) // skip segments too short.
-    {
-      continue;
-    }
-    else { clean.push(tempCoords); } // segment isnt too big; can just send it through.
+    else if (prevSegLen > threshold) // we've skipped enough to create a long enough segment, so we "save" it
+    { clean.push(tempCoords); }
+    else
+    { clean.push(tempCoords); }
+
   }
   clean.push(nextTempCoords)
   return clean;
-  */
 
-  for(let i = 0; i < path.length; i+=2){
-    var tempCoords = [path[i][1], path[i][2]];
-    clean.push(tempCoords);
-  }
-  return clean
+  // for(let i = 0; i < path.length; i+=2){
+  //   var tempCoords = [path[i][1], path[i][2]];
+  //   clean.push(tempCoords);
+  // }
+  // return clean
 }
 export function verifyPaths(){
   for (pathCounter; pathCounter < pathcount; pathCounter++){ // global pathcount shared with pathtrack.js
