@@ -85,7 +85,7 @@ const tick = () => {
     }
     var crash = checkCollision(live_planes);
     if(crash != 0){
-      placeExplosion(live_planes[crash[0]].currentPos[0], live_planes[crash[0]].currentPos[1]);
+      placeExplosion(gameArea.context, live_planes[crash[0]].currentPos[0]-16, live_planes[crash[0]].currentPos[1]-16);
       currentNote = "There was a crash! " + live_planes[crash[0]].name + " and " + live_planes[crash[1]].name + " collided!";
       console.log("CRASH");
       gaming = false;
@@ -98,7 +98,7 @@ const tick = () => {
       currentAirportNames.splice(airportAIndex,1);
       var airportBIndex = currentAirports.indexOf(plane.airportB);
       currentNote = "Flight from " + plane.airportA.name + " to " + plane.airportB.name + " reached its destination safely! (+5 points)";
-      currentAirports.splice(airportAIndex,1);
+      //currentAirports.splice(airportAIndex,1);
       currentAirports.splice(airportBIndex,1);
       currentAirportNames.splice(airportBIndex,1);
       live_planes.splice(index,1);
@@ -130,6 +130,7 @@ const tick = () => {
 
     if(airport.timeElapsed >= MAXAIRPORTTIME && airport.type === "OUTGOING"){
       currentAirports.splice(index,1);
+      currentAirportNames.splice(index,1);
       currentNote = airport.name + " didn't hear anything from you! They took back their request. (-10 points)";
       score -= 10;
     }

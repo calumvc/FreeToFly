@@ -54,7 +54,7 @@ export function checkCollision(planes){
 }
 
 function findDistance(plane1, plane2){
-    return Math.sqrt((Math.abs(plane1.currentPos[0] - plane2.currentPos[0]))**2 + (Math.abs(plane1.currentPos[1] - plane2.currentPos[1]))**2);
+    return Math.sqrt((Math.abs(plane1.currentPos[0]+8 - plane2.currentPos[0]+8))**2 + (Math.abs(plane1.currentPos[1]+8 - plane2.currentPos[1]+8))**2);
 }
 
 function calcRotation(plane){
