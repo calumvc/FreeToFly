@@ -142,10 +142,10 @@ const tick = () => {
     else if(currentAirports[i].timeElapsed >= MAXAIRPORTTIME && currentAirports[i].type === "OUTGOING"){
       currentAirports.splice(i,1);
       currentAirportNames.splice(i,1);
-      currentNote = currentAirports[i].name + " didn't hear anything from you! They took back their request. (-10 points)";
+      currentNote = currentAirports[i].name + " didn't hear anything from you! They took back their request. (-5 points)";
       pastNoteIndex = currentNoteIndex;
       currentNoteIndex = 3;
-      score -= 10;
+      score -= 5;
     }
 
     else if(currentAirports[i].timeElapsed >=MAXAIRPORTTIME && currentAirports[i].inUse == false){
@@ -158,7 +158,7 @@ const tick = () => {
     }
   };
 
-  if (timer % Math.round(LEVELTIME / (level * 1.5)) == 0 || timer == 2) {
+  if (timer % Math.round(LEVELTIME / (level * 3)) == 0 || timer == 2) {
     // logic to spawn planes, increasing as the level increments
     spawnMission(); }
 
