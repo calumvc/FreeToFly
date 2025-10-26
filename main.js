@@ -1,4 +1,3 @@
-//might add another event listener to start game in the future
 import gameLoop from "./modules/gameLoop.js";
 import { placeBackground } from "./modules/helpRender.js";
 
@@ -23,4 +22,5 @@ export var gameArea = {
   }
 }
 
-gameArea.start();
+  gameArea.start();
+

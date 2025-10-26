@@ -1,4 +1,4 @@
-import { placePlane, slidePlane, placeAirport, placeBackground, placeExplosion } from "./helpRender.js";
+import { placePlane, slidePlane, placeAirport, placeBackground, placeErrorImg, placeExplosion } from "./helpRender.js";
 import { createAirport, currentAirports, currentAirportNames } from "./airport.js";
 import { updateCurrentPlanePos, createPlane, checkCollision } from "./plane.js";
 import { gameArea } from "../main.js";
@@ -11,13 +11,12 @@ const LEVELTIME = 20;
 const LEEWAY = 20;
 const GAMETIME = 300;
 const MAXAIRPORTTIME = 30;
+const TICKSPEED = 1000;
 var live_planes = [];
 var pathCounter = 0;
 var pathsArray = [];
 var currentNote = "Welcome to FreeToFly, start by dragging a between two airports of the same colour!"
-
-// const planesContext = document.getElementById('canvasPlanes').getContext('2d');
-// planesContext.globalCompositeOperation = 'copy';
+var pastNote = "previous notes will go here..."; // this is for the user to read so they know whats previous and whats not
 
 var colours = [
   "rgb(220,25,0)",
@@ -38,22 +37,22 @@ var colours = [
 ];
 
 export default function gameLoop() {
-  setInterval(tick, 1000);
-  // setInterval(tick, 1000/60);
+  setInterval(tick, TICKSPEED);
 }
 
 const tick = () => {
   if (gaming === false) {
     // if player dies
     clearInterval();
-    gameOver();
     return;
   }
 
-  console.log(currentNote);
+  console.log("Past note ->", pastNote); // these will go in the nice text box along with score
+  console.log("Current note ->", currentNote);
   verifyPaths(); // verifies all line strokes in the queue, 
 
   placeBackground(gameArea.context);
+  placeErrorImg(gameArea.context);
 
   live_planes.forEach((plane) => {
     
@@ -70,22 +69,14 @@ const tick = () => {
             plane.path[pathPosIndex+1][0],
             plane.path[pathPosIndex+1][1],
             now,
-            now+1000, // 1000ms tick period.. i.e. the animation ends in time for next tick
-            plane.rotation
-        );
-    }
-    else if (false)
-    {
-        placePlane(
-            gameArea.context,
-            plane.currentPes[0],
-            plane.currentPos[1],
+            now+TICKSPEED, // ??? tick period.. i.e. the animation ends in time for next tick
             plane.rotation
         );
     }
     var crash = checkCollision(live_planes);
     if(crash != 0){
       placeExplosion(gameArea.context, live_planes[crash[0]].currentPos[0]-16, live_planes[crash[0]].currentPos[1]-16);
+      pastNote = currentNote;
       currentNote = "There was a crash! " + live_planes[crash[0]].name + " and " + live_planes[crash[1]].name + " collided!";
       console.log("CRASH");
       gaming = false;
@@ -97,6 +88,7 @@ const tick = () => {
       currentAirports.splice(airportAIndex,1);
       currentAirportNames.splice(airportAIndex,1);
       var airportBIndex = currentAirports.indexOf(plane.airportB);
+      pastNote = currentNote;
       currentNote = "Flight from " + plane.airportA.name + " to " + plane.airportB.name + " reached its destination safely! (+5 points)";
       //currentAirports.splice(airportAIndex,1);
       currentAirports.splice(airportBIndex,1);
@@ -158,11 +150,23 @@ const tick = () => {
 
   if (timer === GAMETIME) {
     gaming = false;
+    gameOver();
   }
 };
 
 export function gameOver() {
-  console.log("GAME OVER!!");
+  //console.log("GAME OVER!!");
+  let div = document.createElement("div");
+  div.classList.add("gameover");
+  let p1 = document.createElement("p");
+  p1.id = "p1";
+  let p2 = document.createElement("p");
+  let i = document.createElement("div");
+  i.classList.add("GO_image");
+  p1.textContent = "PLANE CRASH... GAME OVER...";
+  p2.textContent = "Your final score: " + score;
+  div.append(i,p1,p2);
+  document.body.appendChild(div);
 }
 
 export function spawnMission() {
@@ -171,6 +175,7 @@ export function spawnMission() {
   colours.shift();
   var aportA = createAirport(colour, "OUTGOING"); // create sender airport?
   var aportB = createAirport(colour, "INCOMING"); // create recipient airport?
+  pastNote = currentNote;
   currentNote = "Flight from " + aportA.name + " to " + aportB.name + " is looking for direction!";
 }
 
@@ -184,7 +189,7 @@ function cleanPath(path){
   return clean
 }
 export function verifyPaths(){
-  for (pathCounter; pathCounter < pathcount; pathCounter++){
+  for (pathCounter; pathCounter < pathcount; pathCounter++){ // global pathcount shared with pathtrack.js
     var pathToVerify = pathsDic[pathCounter];
     verify(pathToVerify);
   }
@@ -220,6 +225,7 @@ export function verify(path){
               airportA.inUse = true;
               airportB.inUse = true;
               
+              pastNote = currentNote;
               currentNote = airportA.name + " received your route to " + airportB.name + ". Bon Voyage!";
 
               pathsArray.push(cleanPath(path[1]));
@@ -231,5 +237,6 @@ export function verify(path){
       }
     }
   }
+  pastNote = currentNote;
   currentNote = "Invalid flight path!";
 }

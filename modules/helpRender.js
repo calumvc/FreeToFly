@@ -4,6 +4,12 @@ const bg = (() => {
     return bgObj
 })();
 
+const errorImg = (() => {
+    let errorImg = document.createElement("img");
+    errorImg.src = "./assets/404.png"
+    return errorImg 
+})();
+
 export function placePlane(context, x, y, deg=0) {
     return placeURL("./assets/plane.png", context, x, y, deg);
 }
@@ -54,4 +60,8 @@ export function placeURL(src, context, x, y, deg=0) {
 
 export function placeBackground(context) {
     context.drawImage(bg, 0, 0);
+}
+
+export function placeErrorImg(context) {
+    context.drawImage(errorImg, 830, 770);
 }
