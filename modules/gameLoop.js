@@ -103,41 +103,39 @@ const tick = () => {
 
 
   });
-
-  currentAirports.forEach((airport) => {
-    // console.log(airport.flashed)
+  var airportLength = currentAirports.length;
+  for(let i = airportLength-1; i>=0; i--){
     placeAirport(
       gameArea.context,
-      airport.location[0],
-      airport.location[1],
-      airport.colour,
-      airport.flashed ? 6 : 4
+      currentAirports[i].location[0],
+      currentAirports[i].location[1],
+      currentAirports[i].colour,
+      currentAirports[i].flashed ? 6 : 4
     );
-    airport.timeElapsed += 1;
+    currentAirports[i].timeElapsed += 1;
 
-    var index = currentAirports.indexOf(airport);
-
-    if(airport.type === "OUTGOING" && airport.inUse == true){
-      currentAirports.splice(index,1);
-      currentAirportNames.splice(index,1);
+    //console.log("AIRPORT ", airport.name, airport.type);
+    if(currentAirports[i].type === "OUTGOING" && currentAirports[i].inUse == true){
+      currentAirports.splice(i,1);
+      currentAirportNames.splice(i,1);
     }
 
-    else if(airport.timeElapsed >= MAXAIRPORTTIME && airport.type === "OUTGOING"){
-      currentAirports.splice(index,1);
-      currentAirportNames.splice(index,1);
-      currentNote = airport.name + " didn't hear anything from you! They took back their request. (-10 points)";
+    else if(currentAirports[i].timeElapsed >= MAXAIRPORTTIME && currentAirports[i].type === "OUTGOING"){
+      currentAirports.splice(i,1);
+      currentAirportNames.splice(i,1);
+      currentNote = currentAirports[i].name + " didn't hear anything from you! They took back their request. (-10 points)";
       score -= 10;
     }
 
-    else if(airport.timeElapsed >=MAXAIRPORTTIME && airport.inUse == false){
-      currentAirports.splice(index,1);
-      currentAirportNames.splice(index,1);
+    else if(currentAirports[i].timeElapsed >=MAXAIRPORTTIME && currentAirports[i].inUse == false){
+      currentAirports.splice(i,1);
+      currentAirportNames.splice(i,1);
     }
 
-    if (airport.type === "OUTGOING") {
-      airport.flashed = !airport.flashed;
+    if (currentAirports[i].type === "OUTGOING") {
+      currentAirports[i].flashed = !currentAirports[i].flashed;
     }
-  });
+  };
 
   if (timer % Math.round(LEVELTIME / (level * 1.5)) == 0 || timer == 2) {
     // logic to spawn planes, increasing as the level increments
