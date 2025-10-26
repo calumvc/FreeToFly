@@ -145,7 +145,9 @@ const tick = () => {
       currentNote = currentAirports[i].name + " didn't hear anything from you! They took back their request. (-5 points)";
       pastNoteIndex = currentNoteIndex;
       currentNoteIndex = 3;
-      score -= 5;
+      if(score != 0){
+        score -= 5;
+      }
     }
 
     else if(currentAirports[i].timeElapsed >=MAXAIRPORTTIME && currentAirports[i].inUse == false){
