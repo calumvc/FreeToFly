@@ -46,6 +46,7 @@ const tick = () => {
   if (gaming === false) {
     // if player dies
     clearInterval();
+    gameOver();
     return;
   }
 
@@ -84,7 +85,8 @@ const tick = () => {
     }
     var crash = checkCollision(live_planes);
     if(crash != 0){
-      placeExplosion(live_planes[crash[0]].currentPos[0], live_planes[crash[0]].currentPos[1]);
+      placeExplosion(gameArea.context, live_planes[crash[0]].currentPos[0]-16, live_planes[crash[0]].currentPos[1]-16);
+      placeExplosion(gameArea.context, live_planes[crash[1]].currentPos[0]-16, live_planes[crash[1]].currentPos[1]-16);
       pastNote = currentNote;
       currentNote = "There was a crash! " + live_planes[crash[0]].name + " and " + live_planes[crash[1]].name + " collided!";
       pastNoteIndex = currentNoteIndex;
@@ -115,50 +117,48 @@ const tick = () => {
 
 
   });
-
-  currentAirports.forEach((airport) => {
-    // console.log(airport.flashed)
+  var airportLength = currentAirports.length;
+  for(let i = airportLength-1; i>=0; i--){
     placeAirport(
       gameArea.context,
-      airport.location[0],
-      airport.location[1],
-      airport.colour,
-      airport.flashed ? 6 : 4
+      currentAirports[i].location[0],
+      currentAirports[i].location[1],
+      currentAirports[i].colour,
+      currentAirports[i].flashed ? 6 : 4
     );
-    airport.timeElapsed += 1;
+    currentAirports[i].timeElapsed += 1;
 
-    var index = currentAirports.indexOf(airport);
-
-    if(airport.type === "OUTGOING" && airport.inUse == true){
-      currentAirports.splice(index,1);
-      currentAirportNames.splice(index,1);
+    //console.log("AIRPORT ", airport.name, airport.type);
+    if(currentAirports[i].type === "OUTGOING" && currentAirports[i].inUse == true){
+      currentAirports.splice(i,1);
+      currentAirportNames.splice(i,1);
     }
 
-    if(airport.timeElapsed >= MAXAIRPORTTIME && airport.type === "OUTGOING"){
-      currentAirports.splice(index,1);
-      pastNote = currentNote;
-      currentNote = airport.name + " didn't hear anything from you! They took back their request. (-10 points)";
+    else if(currentAirports[i].timeElapsed >= MAXAIRPORTTIME && currentAirports[i].type === "OUTGOING"){
+      currentAirports.splice(i,1);
+      currentAirportNames.splice(i,1);
+      currentNote = currentAirports[i].name + " didn't hear anything from you! They took back their request. (-10 points)";
       pastNoteIndex = currentNoteIndex;
       currentNoteIndex = 3;
       score -= 10;
     }
 
-    if(airport.timeElapsed >=MAXAIRPORTTIME && airport.inUse == false){
-      currentAirports.splice(index,1);
-      currentAirportNames.splice(index,1);
+    else if(currentAirports[i].timeElapsed >=MAXAIRPORTTIME && currentAirports[i].inUse == false){
+      currentAirports.splice(i,1);
+      currentAirportNames.splice(i,1);
     }
 
-    if (airport.type === "OUTGOING") {
-      airport.flashed = !airport.flashed;
+    if (currentAirports[i].type === "OUTGOING") {
+      currentAirports[i].flashed = !currentAirports[i].flashed;
     }
-  });
+  };
 
   if (timer % Math.round(LEVELTIME / (level * 1.5)) == 0 || timer == 2) {
     // logic to spawn planes, increasing as the level increments
     spawnMission(); }
 
   console.log("Timer :", timer);
-  if (timer % LEVELTIME == 0) {
+  if (timer % LEVELTIME == 0 && level < 5) {
     level++;
     console.log("Level :", level);
   }
@@ -214,8 +214,11 @@ export function spawnMission() {
   var aportB = createAirport(colour, "INCOMING"); // create recipient airport?
   pastNote = currentNote;
   currentNote = "Flight from " + aportA.name + " to " + aportB.name + " is looking for direction!";
-  pastNoteIndex = currentNoteIndex;
-  currentNoteIndex = 4;
+  if(aportA != null && aportB != null){
+    currentNote = "Flight from " + aportA.name + " to " + aportB.name + " is looking for direction!";
+    pastNoteIndex = currentNoteIndex;
+    currentNoteIndex = 4;
+  }
 }
 
 function cleanPath(path){

@@ -1,9 +1,10 @@
-
-# FreeToFly
+# ![404](./assets/gameover.png) FreeToFly
 
 ## A simple game for 404 pages
 
-## Testing
+Created for FreeToBooks Hackthon Challenge at *Do You Have The Guts 2025*
+
+## ![Plane](./assets/plane.png) Testing
 
 ```bash
 npm i live-server
