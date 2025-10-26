@@ -1,4 +1,4 @@
-const MAX_DISTANCE_UNTIL_COLLISION = 10;
+const MAX_DISTANCE_UNTIL_COLLISION = 20;
 
 function makePlaneLayer()
 {
@@ -54,7 +54,13 @@ export function checkCollision(planes){
 }
 
 function findDistance(plane1, plane2){
-    return Math.sqrt((Math.abs(plane1.currentPos[0]+8 - plane2.currentPos[0]+8))**2 + (Math.abs(plane1.currentPos[1]+8 - plane2.currentPos[1]+8))**2);
+    let plane1PosX = plane1.currentPos[0]
+    let plane2PosX = plane2.currentPos[0]
+    let plane1PosY = plane1.currentPos[1]
+    let plane2PosY = plane2.currentPos[1]
+    let dist = Math.sqrt(Math.abs(plane1PosX - plane2PosX)**2 + Math.abs(plane1PosY - plane2PosY))**2;
+    console.log("dist:", dist)
+    return dist
 }
 
 function calcRotation(plane){
