@@ -42,8 +42,9 @@ export function updateCurrentPlanePos(plane){
 }
 
 export function checkCollision(planes){
+    console.log(planes)
     for(let i = 0; i < planes.length; i++){
-        for(let j = 0; i < planes.length; i++){
+        for(let j = 1; j < planes.length; j++){
             var distance = findDistance(planes[i], planes[j]);
             if(distance <= MAX_DISTANCE_UNTIL_COLLISION && i != j){
                 return [i,j];
