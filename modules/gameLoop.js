@@ -44,6 +44,7 @@ const tick = () => {
   if (gaming === false) {
     // if player dies
     clearInterval();
+    gameOver();
     return;
   }
 
@@ -76,6 +77,7 @@ const tick = () => {
     var crash = checkCollision(live_planes);
     if(crash != 0){
       placeExplosion(gameArea.context, live_planes[crash[0]].currentPos[0]-16, live_planes[crash[0]].currentPos[1]-16);
+      placeExplosion(gameArea.context, live_planes[crash[1]].currentPos[0]-16, live_planes[crash[1]].currentPos[1]-16);
       pastNote = currentNote;
       currentNote = "There was a crash! " + live_planes[crash[0]].name + " and " + live_planes[crash[1]].name + " collided!";
       console.log("CRASH");
