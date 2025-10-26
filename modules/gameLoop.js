@@ -54,7 +54,16 @@ const tick = () => {
       plane.currentPos[1],
       plane.rotation,
     );
-
+    var crash = checkCollision(live_planes);
+    console.log("CRASSSH ", crash);
+    if(crash != 0){
+      console.log(live_planes[crash[0]].currentPos);
+      console.log(live_planes[crash[1]].currentPos);
+      placeExplosion(gameArea.context, live_planes[crash[0]].currentPos[0]-16, live_planes[crash[0]].currentPos[1]-16);
+      console.log("CRASH");
+      gaming = false;
+    }
+    
     if(updateCurrentPlanePos(plane) == 0){
       var index = live_planes.indexOf(plane);
       var airportAIndex = currentAirports.indexOf(plane.airportA);
@@ -67,13 +76,6 @@ const tick = () => {
       score += 5;
     }
 
-    var crash = checkCollision(live_planes);
-    console.log("CRASSSH ", crash);
-    if(crash != 0){
-      placeExplosion(gameArea.context, live_planes[crash[0]].currentPos[0], live_planes[crash[0]].currentPos[1]);
-      console.log("CRASH");
-      gaming = false;
-    }
 
   });
 
