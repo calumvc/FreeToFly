@@ -1,13 +1,22 @@
-# ![404](./assets/gameover.png) FreeToFly
 
-## A simple game for 404 pages
+# ![FreeToFly](./assets/gameover.png) FreeToFly
+*Created for **Do you have the GUTS? 2025** Hackathon*
 
-Created for FreeToBooks Hackthon Challenge at *Do You Have The Guts 2025*
+### A lightweight Vanilla JS game for error 404 pages
 
-## ![Plane](./assets/plane.png) Testing
+### Team One
 
+- [Andrei Boghean](https://github.com/AndreiBoghean)
+- [Calum Cardownie](https://github.com/calumvc)
+- [Jack Neilson](https://github.com/jack27106)
+- [Joshua Niewczas](https://github.com/hummhu)
+- [Lawrence Zheng](https://github.com/RAF-law)
+
+
+### Testing
 ```bash
 npm i live-server
 
 npx live-server
 ```
+
