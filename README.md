@@ -10,7 +10,7 @@
 - [Calum Cardownie](https://github.com/calumvc)
 - [Jack Neilson](https://github.com/jack27106)
 - [Joshua Niewczas](https://github.com/hummhu)
-- [Lawrence Zheng](https://github.com/RAF-law)
+- [Lawrence Zhang](https://github.com/RAF-law)
 
 
 ### Testing
