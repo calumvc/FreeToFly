@@ -46,7 +46,7 @@ window.addEventListener("DOMContentLoaded", (e) => {
     function drawdot(x, y) {
         ctx.beginPath();
         ctx.fillStyle = "grey";
-        ctx.arc(x, y, 2, 0, 2 * Math.PI); // 2 is the radius in case you wanna change
+        ctx.arc(x, y, 0, 0, 2 * Math.PI); // 2 is the radius in case you wanna change
         ctx.fill();
         ctx.closePath();
         currentPath.push(["dot", x, y, 2, 0, 2 * Math.PI]);

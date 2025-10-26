@@ -207,7 +207,6 @@ export function gameOver() {
     highestScore(score); //set new highest
     hs = score;
   }
-  //console.log("GAME OVER!!");
   let div = document.createElement("div");
   div.classList.add("gameover");
   let p1 = document.createElement("p");
@@ -222,6 +221,7 @@ export function gameOver() {
   p3.textContent = "Highest: " + hs;
   div.append(i,p1,p2,p3);
   document.body.appendChild(div);
+  // return
 }
 
 export function spawnMission() {
