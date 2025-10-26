@@ -15,7 +15,7 @@ const TICKSPEED = 1000;
 var live_planes = [];
 var pathCounter = 0;
 var pathsArray = [];
-var currentNote = "Welcome to FreeToFly, start by dragging a between two airports of the same colour!"
+var currentNote = "Welcome to FreeToFly, start by dragging a line between two airports of the same colour!"
 var pastNote = "previous notes will go here..."; // this is for the user to read so they know whats previous and whats not
 var currentNoteIndex = 0; //for colour mapping
 var pastNoteIndex = 0;
@@ -158,7 +158,7 @@ const tick = () => {
     }
   };
 
-  if (timer % Math.round(LEVELTIME / (level * 1.5)) == 0 || timer == 2) {
+  if (timer % Math.round(LEVELTIME / (level * 3)) == 0 || timer == 2) {
     // logic to spawn planes, increasing as the level increments
     spawnMission(); }
 
