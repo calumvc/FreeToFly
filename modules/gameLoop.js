@@ -176,7 +176,9 @@ export function spawnMission() {
   var aportA = createAirport(colour, "OUTGOING"); // create sender airport?
   var aportB = createAirport(colour, "INCOMING"); // create recipient airport?
   pastNote = currentNote;
-  currentNote = "Flight from " + aportA.name + " to " + aportB.name + " is looking for direction!";
+  if(aportA != null && aportB != null){
+    currentNote = "Flight from " + aportA.name + " to " + aportB.name + " is looking for direction!";
+  }
 }
 
 function cleanPath(path){
