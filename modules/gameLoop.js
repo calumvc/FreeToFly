@@ -1,4 +1,4 @@
-import { placePlane, placeAirport, placeBackground, placeExplosion } from "./helpRender.js";
+import { placePlane, slidePlane, placeAirport, placeBackground, placeExplosion } from "./helpRender.js";
 import { createAirport, currentAirports, currentAirportNames } from "./airport.js";
 import { updateCurrentPlanePos, createPlane, checkCollision } from "./plane.js";
 import { gameArea } from "../main.js";
@@ -14,6 +14,10 @@ const MAXAIRPORTTIME = 30;
 var live_planes = [];
 var pathCounter = 0;
 var pathsArray = [];
+var currentNote = "Welcome to FreeToFly, start by dragging a between two airports of the same colour!"
+
+// const planesContext = document.getElementById('canvasPlanes').getContext('2d');
+// planesContext.globalCompositeOperation = 'copy';
 
 var colours = [
   "rgb(220,25,0)",
@@ -35,6 +39,7 @@ var colours = [
 
 export default function gameLoop() {
   setInterval(tick, 1000);
+  // setInterval(tick, 1000/60);
 }
 
 const tick = () => {
@@ -44,36 +49,62 @@ const tick = () => {
     gameOver();
     return;
   }
-  
+
+  console.log(currentNote);
   verifyPaths(); // verifies all line strokes in the queue, 
 
   placeBackground(gameArea.context);
 
   live_planes.forEach((plane) => {
-    placePlane( gameArea.context, plane.currentPos[0],
-      plane.currentPos[1],
-      plane.rotation,
-    );
+    
+    let now = (new Date()).getTime();
+    let pathPosIndex = plane.path.indexOf(plane.currentPos);
+
+    if (pathPosIndex < plane.path.length-1)
+    {
+        slidePlane(
+            // gameArea.context,
+            plane.layerCanvasContext,
+            plane.path[pathPosIndex][0],
+            plane.path[pathPosIndex][1],
+            plane.path[pathPosIndex+1][0],
+            plane.path[pathPosIndex+1][1],
+            now,
+            now+1000, // 1000ms tick period.. i.e. the animation ends in time for next tick
+            plane.rotation
+        );
+    }
+    else if (false)
+    {
+        placePlane(
+            gameArea.context,
+            plane.currentPes[0],
+            plane.currentPos[1],
+            plane.rotation
+        );
+    }
     var crash = checkCollision(live_planes);
-    console.log("CRASSSH ", crash);
     if(crash != 0){
-      console.log(live_planes[crash[0]].currentPos);
-      console.log(live_planes[crash[1]].currentPos);
-      placeExplosion(gameArea.context, live_planes[crash[0]].currentPos[0]-16, live_planes[crash[0]].currentPos[1]-16);
+      placeExplosion(live_planes[crash[0]].currentPos[0], live_planes[crash[0]].currentPos[1]);
+      currentNote = "There was a crash! " + live_planes[crash[0]].name + " and " + live_planes[crash[1]].name + " collided!";
       console.log("CRASH");
       gaming = false;
     }
-    
+
     if(updateCurrentPlanePos(plane) == 0){
       var index = live_planes.indexOf(plane);
       var airportAIndex = currentAirports.indexOf(plane.airportA);
       currentAirports.splice(airportAIndex,1);
       currentAirportNames.splice(airportAIndex,1);
       var airportBIndex = currentAirports.indexOf(plane.airportB);
+      currentNote = "Flight from " + plane.airportA.name + " to " + plane.airportB.name + " reached its destination safely! (+5 points)";
+      currentAirports.splice(airportAIndex,1);
       currentAirports.splice(airportBIndex,1);
       currentAirportNames.splice(airportBIndex,1);
       live_planes.splice(index,1);
-      score += 5;
+      score += 5
+
+      plane.layerCanvasContext.canvas.remove()
     }
 
 
@@ -99,8 +130,8 @@ const tick = () => {
 
     if(airport.timeElapsed >= MAXAIRPORTTIME && airport.type === "OUTGOING"){
       currentAirports.splice(index,1);
-      currentAirportNames.splice(index,1);
-      console.log("bleh");
+      currentNote = airport.name + " didn't hear anything from you! They took back their request. (-10 points)";
+      score -= 10;
     }
 
     if(airport.timeElapsed >=MAXAIRPORTTIME && airport.inUse == false){
@@ -115,8 +146,7 @@ const tick = () => {
 
   if (timer % Math.round(LEVELTIME / (level * 1.5)) == 0 || timer == 2) {
     // logic to spawn planes, increasing as the level increments
-    spawnMission();
-  }
+    spawnMission(); }
 
   console.log("Timer :", timer);
   if (timer % LEVELTIME == 0) {
@@ -135,12 +165,12 @@ export function gameOver() {
 }
 
 export function spawnMission() {
-  console.log("Mission from airport A to airport B");
   var colour = colours[0];
   colours.push(colours[0]);
   colours.shift();
-  createAirport(colour, "OUTGOING"); // create sender airport?
-  createAirport(colour, "INCOMING"); // create recipient airport?
+  var aportA = createAirport(colour, "OUTGOING"); // create sender airport?
+  var aportB = createAirport(colour, "INCOMING"); // create recipient airport?
+  currentNote = "Flight from " + aportA.name + " to " + aportB.name + " is looking for direction!";
 }
 
 function cleanPath(path){
@@ -189,6 +219,8 @@ export function verify(path){
               airportA.inUse = true;
               airportB.inUse = true;
               
+              currentNote = airportA.name + " received your route to " + airportB.name + ". Bon Voyage!";
+
               pathsArray.push(cleanPath(path[1]));
               live_planes.push(createPlane(cleanPath(path[1]),airportA,airportB));
               return; 
@@ -198,4 +230,5 @@ export function verify(path){
       }
     }
   }
+  currentNote = "Invalid flight path!";
 }
