@@ -120,14 +120,14 @@ const tick = () => {
       currentAirportNames.splice(index,1);
     }
 
-    if(airport.timeElapsed >= MAXAIRPORTTIME && airport.type === "OUTGOING"){
+    else if(airport.timeElapsed >= MAXAIRPORTTIME && airport.type === "OUTGOING"){
       currentAirports.splice(index,1);
       currentAirportNames.splice(index,1);
       currentNote = airport.name + " didn't hear anything from you! They took back their request. (-10 points)";
       score -= 10;
     }
 
-    if(airport.timeElapsed >=MAXAIRPORTTIME && airport.inUse == false){
+    else if(airport.timeElapsed >=MAXAIRPORTTIME && airport.inUse == false){
       currentAirports.splice(index,1);
       currentAirportNames.splice(index,1);
     }
@@ -142,7 +142,7 @@ const tick = () => {
     spawnMission(); }
 
   console.log("Timer :", timer);
-  if (timer % LEVELTIME == 0) {
+  if (timer % LEVELTIME == 0 && level < 5) {
     level++;
     console.log("Level :", level);
   }
