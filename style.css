@@ -25,7 +25,12 @@ canvas {
 }
 
 #p1{
-    margin-top:190px;
+    margin-top:180px;
+}
+
+#p3{
+    margin-top: -10px;
+    font-size: 16px;
 }
 
 .GO_image{

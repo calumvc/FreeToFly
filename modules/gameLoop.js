@@ -19,6 +19,7 @@ var currentNote = "Welcome to FreeToFly, start by dragging a between two airport
 var pastNote = "previous notes will go here..."; // this is for the user to read so they know whats previous and whats not
 var currentNoteIndex = 0; //for colour mapping
 var pastNoteIndex = 0;
+var hs;
 
 var colours = [
   "rgb(220,25,0)",
@@ -46,6 +47,7 @@ const tick = () => {
   if (gaming === false) {
     // if player dies
     clearInterval();
+    console.log("highest score: " + hs);
     return;
   }
 
@@ -195,17 +197,25 @@ function updateScore(score){
 }
 
 export function gameOver() {
+  hs = readHighest(hs);
+  if (score > hs){
+    highestScore(score); //set new highest
+    hs = score;
+  }
   //console.log("GAME OVER!!");
   let div = document.createElement("div");
   div.classList.add("gameover");
   let p1 = document.createElement("p");
   p1.id = "p1";
   let p2 = document.createElement("p");
+  let p3 = document.createElement("p");
+  p3.id = "p3";
   let i = document.createElement("div");
   i.classList.add("GO_image");
   p1.textContent = "PLANE CRASH... GAME OVER...";
   p2.textContent = "Your final score: " + score;
-  div.append(i,p1,p2);
+  p3.textContent = "Highest: " + hs;
+  div.append(i,p1,p2,p3);
   document.body.appendChild(div);
 }
 
@@ -321,4 +331,35 @@ export function verify(path){
   currentNote = "Invalid flight path!";
   pastNoteIndex = currentNoteIndex;
   currentNoteIndex = 6;
+}
+
+function highestScore(score){
+  const xmlDoc = document.implementation.createDocument("", "", null);
+  const root = xmlDoc.createElement("HighestScore");
+
+  function createElement(name, value) {
+    const element = xmlDoc.createElement(name);
+    element.textContent = value;
+    return element;
+  }
+  const highestScore = xmlDoc.createElement("HS");
+  highestScore.appendChild(createElement("score", score));
+  root.appendChild(highestScore);
+  xmlDoc.appendChild(root);
+
+  const serializer = new XMLSerializer();
+  const xmlString = serializer.serializeToString(xmlDoc);
+  localStorage.setItem("HighestScore", xmlString);
+}
+
+function readHighest(){
+  const xmlString = localStorage.getItem("HighestScore");
+  if (xmlString == null){
+    return 0;
+  } else {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(xmlString, "application/xml");
+    const Highest = xmlDoc.querySelector("HighestScore");
+    return parseInt(Highest.querySelector("HS").querySelector("score").textContent);
+  }
 }
