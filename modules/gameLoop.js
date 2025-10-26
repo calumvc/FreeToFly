@@ -220,13 +220,36 @@ export function spawnMission() {
   }
 }
 
+const thresholdUpper = 20
+const thresholdLower = 10
 function cleanPath(path){
   var clean = [];
-  for(let i = 0; i < path.length; i+=2){
+  for(let i = 0; i < path.length-2; i+=2){
     var tempCoords = [path[i][1], path[i][2]];
-    clean.push(tempCoords);
+    var nextTempCoords = [path[i+2][1], path[i+2][2]];
+
+    var xDiff = nextTempCoords[0]-tempCoords[0]
+    var yDiff = nextTempCoords[1]-tempCoords[1]
+    var segLen = Math.sqrt((xDiff)**2 + (yDiff)**2)
+
+    // if dist to next point is longer than we'd want..
+    if (segLen > thresholdUpper)
+    {
+      // find how many sub-segments we want
+      let divCount = segLen / thresholdUpper
+      let xComponent = xDiff / divCount
+      let yComponent = yDiff / divCount
+
+      // start at the segment origin, and slowly push the segment in smaller chunks
+      for (let d = 0 ; d < divCount ; d++)
+        clean.push([tempCoords[0]+d*xComponent, tempCoords[1]+d*yComponent])
+    }
+    else if (segLen < thresholdLower) // skip segments too short.
+    {
+      continue;
+    }
+    else { clean.push(tempCoords); } // segment isnt too big; can just send it through.
   }
-  // console.log(clean);
   return clean
 }
 export function verifyPaths(){
