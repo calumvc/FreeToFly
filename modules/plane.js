@@ -17,7 +17,7 @@ function makePlaneLayer()
 export function createPlane(path,airportA,airportB){
     const plane = new Object({
         path: path,
-        currentPos: path[0],
+        currentPos: path[2],
         rotation: 0,
         airportA: airportA,
         airportB: airportB,
