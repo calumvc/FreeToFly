@@ -21,10 +21,23 @@ const airports = {
   Frankfurt: [902, 281],
   Charlotte: [452, 353],
   BuenosAires: [566, 717],
+  Glasgow: [848, 238],
+  Lima: [477, 586],
+  Rio: [634, 648],
+  Greenland: [642, 200],
+  Reykjavik: [750, 171],
+  Antananarivo: [1099, 630],
+  Wellington: [1735, 750],
+  Sydney: [1604, 708],
+  Liberia: [818, 505],
+  Cairo: [1025, 388],
+  CapeTown: [958, 710],
+  Warsaw: [983, 259],
+  Kyiv: [1032, 291],
 };
 
 export let currentAirports = [];
-let currentAirportNames = [];
+export let currentAirportNames = [];
 
 export function createAirport(colour, type) {
   const airportKeys = Object.keys(airports);
@@ -46,7 +59,9 @@ export function createAirport(colour, type) {
     location: airports[airportName],
     colour: colour,
     type: type,
-    flashed: false
+    flashed: false,
+    timeElapsed: 0,
+    inUse: false,
   });
 
   currentAirportNames.push(airport.name);

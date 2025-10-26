@@ -4,16 +4,42 @@ const bg = (() => {
     return bgObj
 })();
 
+const errorImg = (() => {
+    let errorImg = document.createElement("img");
+    errorImg.src = "./assets/404.png"
+    return errorImg 
+})();
+
 export function placePlane(context, x, y, deg=0) {
-    console.log(deg);
     return placeURL("./assets/plane.png", context, x, y, deg);
 }
+
+// expects unix time for startTime and endTime
+export function slidePlane(context, xA, yA, xB, yB, startTime, endTime, deg=-1)
+{
+    const now = (new Date()).getTime(); // unix miliseconds
+    const target = endTime-startTime
+    const progressed = now-startTime
+
+    let lerpValue = progressed/target
+    let currentX = xA+lerpValue*(xB-xA)
+    let currentY = yA+lerpValue*(yB-yA)
+    placePlane(context, currentX, currentY, deg)
+
+    if (lerpValue > 1.0) return;
+
+    window.requestAnimationFrame(() => {slidePlane(context, xA, yA, xB, yB, startTime, endTime, deg)});
+}
+
 export function placeAirport(context, x, y, colour, radius=4) {
     context.beginPath();
     context.arc(x, y, radius, 0, 2 * Math.PI);
     context.fillStyle = colour;
     context.fill();
     context.lineWidth = 4;
+}
+export function placeExplosion(context, x, y){
+    return placeURL("./assets/collide.png", context, x, y);
 }
 
 export function placeURL(src, context, x, y, deg=0) {
@@ -34,4 +60,8 @@ export function placeURL(src, context, x, y, deg=0) {
 
 export function placeBackground(context) {
     context.drawImage(bg, 0, 0);
+}
+
+export function placeErrorImg(context) {
+    context.drawImage(errorImg, 830, 770);
 }

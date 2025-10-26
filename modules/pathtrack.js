@@ -31,16 +31,16 @@ window.addEventListener("DOMContentLoaded", (e) => {
         drawdot(x, y);
     }
 
-    function compareDistance(event, lastpos) { //only record after some distance moved
-        currentX = event.clientX;
-        currentY = event.clientY;
-        lastX = lastpos[0];
-        lastY = lastpos[1];
-        if ((currentX - lastX) ** 2 + (currentY - lastY) ** 2 > 60) { // modify the number to determine the distance between path dots
-            return 1;
-        } else {
-            return 0;
-        }
+    function compareDistance(event,lastpos){ //only record after some distance moved
+    currentX = event.clientX;
+    currentY = event.clientY;
+    lastX = lastpos[0];
+    lastY = lastpos[1];
+    if ((currentX - lastX)**2 + (currentY - lastY)**2 > 20){ // modify the number to determine the distance between path dots
+        return 1;
+    }else {
+        return 0;
+    }
     }
 
     function drawdot(x, y) {
@@ -102,7 +102,7 @@ window.addEventListener("DOMContentLoaded", (e) => {
         currentPath = [];
         pathcount++;
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        //drawValidPath();
-    })
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //drawValidPath();
+})
 })
