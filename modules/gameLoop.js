@@ -39,7 +39,6 @@ const tick = () => {
   if (gaming === false) {
     // if player dies
     clearInterval();
-    gameOver();
     return;
   }
   
@@ -98,11 +97,23 @@ const tick = () => {
 
   if (timer === 120) {
     gaming = false;
+    gameOver();
   }
 };
 
 export function gameOver() {
-  console.log("GAME OVER!!");
+  //console.log("GAME OVER!!");
+  let div = document.createElement("div");
+  div.classList.add("gameover");
+  let p1 = document.createElement("p");
+  p1.id = "p1";
+  let p2 = document.createElement("p");
+  let i = document.createElement("div");
+  i.classList.add("GO_image");
+  p1.textContent = "PLANE CRASH... GAME OVER...";
+  p2.textContent = "Your final score: " + score;
+  div.append(i,p1,p2);
+  document.body.appendChild(div);
 }
 
 export function spawnMission() {
@@ -129,7 +140,6 @@ export function verifyPaths(){
     verify(pathToVerify);
   }
 }
-
 
 export function verify(path){
   var startPoint = [path[1][0][1], path[1][0][2]];
