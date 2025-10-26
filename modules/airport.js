@@ -37,7 +37,7 @@ const airports = {
 };
 
 export let currentAirports = [];
-let currentAirportNames = [];
+export let currentAirportNames = [];
 
 export function createAirport(colour, type) {
   const airportKeys = Object.keys(airports);
