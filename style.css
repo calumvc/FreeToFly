@@ -56,3 +56,30 @@ canvas {
     height:300px;
     width:500px;
 }
+
+#notice{
+    height:300px;
+    width:300px;
+    position: absolute;
+    top:500px;
+    left:50px;
+    font-family: 'Fixedys', sans-serif;
+    border-radius: 10px;
+    font-size: 25px;
+    text-align: center;
+    border: 2px dotted rgb(145, 145, 145);
+}
+
+#note{
+    padding-left:20px;
+    padding-right: 20px;
+}
+
+#score{
+    color:rgba(56, 56, 56, 1);
+    font-size: 30px;
+    position:absolute;
+    left:50%;
+    transform: translate(-50%);
+    bottom:10px;
+}

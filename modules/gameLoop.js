@@ -17,6 +17,8 @@ var pathCounter = 0;
 var pathsArray = [];
 var currentNote = "Welcome to FreeToFly, start by dragging a between two airports of the same colour!"
 var pastNote = "previous notes will go here..."; // this is for the user to read so they know whats previous and whats not
+var currentNoteIndex = 0; //for colour mapping
+var pastNoteIndex = 0;
 
 var colours = [
   "rgb(220,25,0)",
@@ -47,8 +49,15 @@ const tick = () => {
     return;
   }
 
-  console.log("Past note ->", pastNote); // these will go in the nice text box along with score
-  console.log("Current note ->", currentNote);
+  // console.log("Past note ->", pastNote); // these will go in the nice text box along with score
+  // console.log("Current note ->", currentNote);
+  if (pastNoteIndex == 0){
+    updateText(pastNote,pastNoteIndex);
+  } else {
+    updateText(currentNote,currentNoteIndex);
+  }
+
+  updateScore(score);
   verifyPaths(); // verifies all line strokes in the queue, 
 
   placeBackground(gameArea.context);
@@ -78,8 +87,11 @@ const tick = () => {
       placeExplosion(live_planes[crash[0]].currentPos[0], live_planes[crash[0]].currentPos[1]);
       pastNote = currentNote;
       currentNote = "There was a crash! " + live_planes[crash[0]].name + " and " + live_planes[crash[1]].name + " collided!";
+      pastNoteIndex = currentNoteIndex;
+      currentNoteIndex = 1;
       console.log("CRASH");
       gaming = false;
+      gameOver();
     }
 
     if(updateCurrentPlanePos(plane) == 0){
@@ -90,6 +102,8 @@ const tick = () => {
       var airportBIndex = currentAirports.indexOf(plane.airportB);
       pastNote = currentNote;
       currentNote = "Flight from " + plane.airportA.name + " to " + plane.airportB.name + " reached its destination safely! (+5 points)";
+      pastNoteIndex = currentNoteIndex;
+      currentNoteIndex = 2;
       currentAirports.splice(airportAIndex,1);
       currentAirports.splice(airportBIndex,1);
       currentAirportNames.splice(airportBIndex,1);
@@ -124,6 +138,8 @@ const tick = () => {
       currentAirports.splice(index,1);
       pastNote = currentNote;
       currentNote = airport.name + " didn't hear anything from you! They took back their request. (-10 points)";
+      pastNoteIndex = currentNoteIndex;
+      currentNoteIndex = 3;
       score -= 10;
     }
 
@@ -154,6 +170,27 @@ const tick = () => {
   }
 };
 
+const colorMap = {
+    0: "rgba(56, 56, 56, 1)", //welcome
+    1: "rgba(187, 63, 63, 1)", //crash
+    2: "rgba(23, 150, 69, 1)", //reach destination
+    3: "rgba(209, 121, 21, 1)", //no interaction
+    4: "rgba(44, 64, 196, 1)",  //new calling
+    5: "rgba(49, 150, 190, 1)", //received route
+    6: "rgba(160, 85, 148, 1)", //invalid path
+};
+
+function updateText(text,index){
+  let n = document.getElementById("note");
+  n.style.color = colorMap[index];
+  n.textContent = text;
+}
+
+function updateScore(score){
+  let s = document.getElementById("score");
+  s.textContent = "Score: " + score;
+}
+
 export function gameOver() {
   //console.log("GAME OVER!!");
   let div = document.createElement("div");
@@ -163,7 +200,7 @@ export function gameOver() {
   let p2 = document.createElement("p");
   let i = document.createElement("div");
   i.classList.add("GO_image");
-  p1.textContent = "PLANE CRASH... GAME OVER...";
+  p1.textContent = "GAME OVER...";
   p2.textContent = "Your final score: " + score;
   div.append(i,p1,p2);
   document.body.appendChild(div);
@@ -177,6 +214,8 @@ export function spawnMission() {
   var aportB = createAirport(colour, "INCOMING"); // create recipient airport?
   pastNote = currentNote;
   currentNote = "Flight from " + aportA.name + " to " + aportB.name + " is looking for direction!";
+  pastNoteIndex = currentNoteIndex;
+  currentNoteIndex = 4;
 }
 
 function cleanPath(path){
@@ -227,7 +266,8 @@ export function verify(path){
               
               pastNote = currentNote;
               currentNote = airportA.name + " received your route to " + airportB.name + ". Bon Voyage!";
-
+              pastNoteIndex = currentNoteIndex;
+              currentNoteIndex = 5;
               pathsArray.push(cleanPath(path[1]));
               live_planes.push(createPlane(cleanPath(path[1]),airportA,airportB));
               return; 
@@ -239,4 +279,6 @@ export function verify(path){
   }
   pastNote = currentNote;
   currentNote = "Invalid flight path!";
+  pastNoteIndex = currentNoteIndex;
+  currentNoteIndex = 6;
 }
