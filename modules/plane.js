@@ -1,7 +1,6 @@
-const MAX_DISTANCE_UNTIL_COLLISION = 20;
+const MAX_DISTANCE_UNTIL_COLLISION = 22;
 
-function makePlaneLayer()
-{
+function makePlaneLayer(){
     let canv = document.createElement("canvas");
     canv.width = 1920;
     canv.height = 1080;
@@ -9,8 +8,6 @@ function makePlaneLayer()
     canv.className = "planeCanvas";
     document.getElementById("canvasPath").insertAdjacentElement("afterend", canv)
     canv.getContext("2d").globalCompositeOperation = 'copy';
-    // console.log("here canv")
-    // console.log(canv)
     return canv;
 }
 
@@ -27,12 +24,7 @@ export function createPlane(path,airportA,airportB){
     return plane;
 }
 
-function getCurrentPlanePos(plane) {
-  return plane.currentPos;
-}
-
-//returns 0 if plane has completed its path, 1 otherwise 
-export function updateCurrentPlanePos(plane){
+export function updateCurrentPlanePos(plane){ //returns 0 if plane has completed its path, 1 otherwise 
     var index = plane.path.indexOf(plane.currentPos);
     if(index == plane.path.length-1){
         return 0;
@@ -43,7 +35,6 @@ export function updateCurrentPlanePos(plane){
 }
 
 export function checkCollision(planes){
-    // console.log(planes)
     for(let i = 0; i < planes.length; i++){
         for(let j = 1; j < planes.length; j++){
             var distance = findDistance(planes[i], planes[j]);
@@ -61,7 +52,6 @@ function findDistance(plane1, plane2){
     let plane1PosY = plane1.currentPos[1]
     let plane2PosY = plane2.currentPos[1]
     let dist = Math.sqrt(Math.abs(plane1PosX - plane2PosX)**2 + Math.abs(plane1PosY - plane2PosY))**2;
-    // console.log("dist:", dist)
     return dist
 }
 
@@ -72,8 +62,6 @@ function calcRotation(plane){
     }
     var xDiff = plane.path[index+1][0] - plane.path[index][0];
     var yDiff = plane.path[index+1][1] - plane.path[index][1];
-    // console.log(xDiff);
-    // console.log(yDiff);
     if(yDiff == 0 && xDiff > 0){
         return 90;
     }

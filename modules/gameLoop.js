@@ -6,12 +6,11 @@ import { gameArea } from "../main.js";
 var timer = 1; // game timer
 var score = 0; // user's score
 var gaming; // boolean for alive
-var level = 1;
-const LEVELTIME = 40;
-const LEEWAY = 20;
-const GAMETIME = 300;
-const MAXAIRPORTTIME = 30;
-const TICKSPEED = 1000;
+var level = 1; 
+const LEVELTIME = 80; // amount of ticks inbetween each level difficulty
+const LEEWAY = 15; // this is the leeway in the distance from the airport for valid routes
+const MAXAIRPORTTIME = 120;
+const TICKSPEED = 400; // game will tick every 500milliseconds
 var live_planes = [];
 var pathCounter = 0;
 var pathsArray = [];
@@ -51,8 +50,6 @@ const tick = () => {
     return;
   }
 
-  // console.log("Past note ->", pastNote); // these will go in the nice text box along with score
-  // console.log("Current note ->", currentNote);
   if (pastNoteIndex == 0){
     updateText(pastNote,pastNoteIndex);
   } else {
@@ -60,7 +57,7 @@ const tick = () => {
   }
 
   updateScore(score);
-  verifyPaths(); // verifies all line strokes in the queue, 
+  verifyPaths(); // verifies all line strokes in the queue
 
   placeBackground(gameArea.context);
   placeErrorImg(gameArea.context);
@@ -73,32 +70,31 @@ const tick = () => {
     let now = (new Date()).getTime();
     let pathPosIndex = plane.path.indexOf(plane.currentPos);
 
-    // for (var pos of plane.path)
-    // { drawdot(pos[0], pos[1]); }
-
     if (pathPosIndex < plane.path.length-1)
     {
         slidePlane(
-            // gameArea.context,
             plane.layerCanvasContext,
             plane.path[pathPosIndex][0],
             plane.path[pathPosIndex][1],
             plane.path[pathPosIndex+1][0],
             plane.path[pathPosIndex+1][1],
             now,
-            now+TICKSPEED, // ??? tick period.. i.e. the animation ends in time for next tick
+            now+TICKSPEED, // TICKSPEED -> tick period.. i.e. the animation ends in time for next tick
             plane.rotation
         );
     }
+
     var crash = checkCollision(live_planes);
+
     if(crash != 0){
       placeExplosion(document.getElementById("canvasCollision").getContext("2d"), live_planes[crash[0]].currentPos[0]-16, live_planes[crash[0]].currentPos[1]-16);
       placeExplosion(document.getElementById("canvasCollision").getContext("2d"), live_planes[crash[1]].currentPos[0]-16, live_planes[crash[1]].currentPos[1]-16);
+
       pastNote = currentNote;
       currentNote = "There was a crash! " + live_planes[crash[0]].name + " and " + live_planes[crash[1]].name + " collided!";
       pastNoteIndex = currentNoteIndex;
       currentNoteIndex = 1;
-      // console.log("CRASH");
+
       gaming = false;
       gameOver();
       return;
@@ -107,17 +103,17 @@ const tick = () => {
     if(updateCurrentPlanePos(plane,gaming) == 0){
       var index = live_planes.indexOf(plane);
       var airportAIndex = currentAirports.indexOf(plane.airportA);
-      //currentAirports.splice(airportAIndex,1);
-      //currentAirportNames.splice(airportAIndex,1);
       var airportBIndex = currentAirports.indexOf(plane.airportB);
+
       pastNote = currentNote;
       currentNote = "Flight from " + plane.airportA.name + " to " + plane.airportB.name + " reached its destination safely! (+5 points)";
       pastNoteIndex = currentNoteIndex;
       currentNoteIndex = 2;
-      //currentAirports.splice(airportAIndex,1);
+
       currentAirports.splice(airportBIndex,1);
       currentAirportNames.splice(airportBIndex,1);
       live_planes.splice(index,1);
+
       score += 5
 
       plane.layerCanvasContext.canvas.remove()
@@ -125,6 +121,7 @@ const tick = () => {
 
 
   });
+
   var airportLength = currentAirports.length;
   for(let i = airportLength-1; i>=0; i--){
     placeAirport(
@@ -132,52 +129,46 @@ const tick = () => {
       currentAirports[i].location[0],
       currentAirports[i].location[1],
       currentAirports[i].colour,
-      currentAirports[i].flashed ? 6 : 4
+      currentAirports[i].flashed ? 6 : 4 // this is changing radius size
     );
+
     currentAirports[i].timeElapsed += 1;
 
-    //console.log("AIRPORT ", airport.name, airport.type);
-    if(currentAirports[i].type === "OUTGOING" && currentAirports[i].inUse == true){
+    if(currentAirports[i].type === "OUTGOING" && currentAirports[i].inUse == true){ // delete the airport if a plane has departed
       currentAirports.splice(i,1);
       currentAirportNames.splice(i,1);
     }
 
-    else if(currentAirports[i].timeElapsed >= MAXAIRPORTTIME && currentAirports[i].type === "OUTGOING"){
+    else if(currentAirports[i].timeElapsed >= MAXAIRPORTTIME && currentAirports[i].type === "OUTGOING"){ // delete the airport if its and OUTGOING and its out of time
       currentAirports.splice(i,1);
       currentAirportNames.splice(i,1);
       currentNote = currentAirports[i].name + " didn't hear anything from you! They took back their request. (-5 points)";
       pastNoteIndex = currentNoteIndex;
       currentNoteIndex = 3;
+      updateText(currentNote,currentNoteIndex); // this note has priority so lets get it up
       if(score != 0){
         score -= 5;
       }
     }
 
-    else if(currentAirports[i].timeElapsed >=MAXAIRPORTTIME && currentAirports[i].inUse == false){
+    else if(currentAirports[i].timeElapsed >= MAXAIRPORTTIME && currentAirports[i].inUse == false){ // delete the airport if its not in use and its out of time
       currentAirports.splice(i,1);
       currentAirportNames.splice(i,1);
     }
 
-    if (currentAirports[i].type === "OUTGOING") {
+    if (currentAirports[i].type === "OUTGOING") { // flash the airport if its OUTGOING and hasn't been acted on 
       currentAirports[i].flashed = !currentAirports[i].flashed;
     }
   };
 
-  if (timer % Math.round(LEVELTIME / (level * 3)) == 0 || timer == 2) {
-    // logic to spawn planes, increasing as the level increments
-    spawnMission(); }
+  if (timer % Math.round(LEVELTIME / (level * 1.5)) == 0 || timer == 2) { spawnMission(); } // logic to spawn planes, increasing as the level increments
 
-  // console.log("Timer :", timer);
-  if (timer % LEVELTIME == 0 && level < 5) {
+  if (timer % LEVELTIME == 0 && level < 5) { // time to level up!
     level++;
-    // console.log("Level :", level);
   }
+
   timer++;
 
-  if (timer === GAMETIME) {
-    gaming = false;
-    gameOver();
-  }
 };
 
 const colorMap = {
@@ -219,17 +210,22 @@ export function gameOver() {
   p1.textContent = "PLANE CRASH... GAME OVER...";
   p2.textContent = "Your final score: " + score;
   p3.textContent = "Highest: " + hs;
-  div.append(i,p1,p2,p3);
-  document.body.appendChild(div);
-  // return
+
+  setTimeout(function(){ // this will delay the notification briefly so the user can see the collision
+    div.append(i,p1,p2,p3);
+    document.body.appendChild(div);
+  }, 1000);
+
+  return
 }
 
 export function spawnMission() {
-  var colour = colours[0];
+  var colour = colours[0]; // queue for colours
   colours.push(colours[0]);
   colours.shift();
-  var aportA = createAirport(colour, "OUTGOING"); // create sender airport?
-  var aportB = createAirport(colour, "INCOMING"); // create recipient airport?
+  var aportA = createAirport(colour, "OUTGOING"); // create sender airport
+  var aportB = createAirport(colour, "INCOMING"); // create recipient airport
+
   pastNote = currentNote;
   currentNote = "Flight from " + aportA.name + " to " + aportB.name + " is looking for direction!";
   if(aportA != null && aportB != null){
@@ -239,17 +235,8 @@ export function spawnMission() {
   }
 }
 
-function drawdot(x, y) {
-    let ctx = gameArea.context;
-    ctx.beginPath();
-    ctx.fillStyle = "red";
-    ctx.arc(x, y, 2, 0, 2 * Math.PI); // 2 is the radius in case you wanna change
-    ctx.fill();
-    ctx.closePath();
-}
-
 const threshold = 20
-function cleanPath(path){
+function cleanPath(path){ // this function removes the lines in the route
   var clean = [path[0][1], path[0][2]];
   
   for(let i = 2; i < path.length-2; i+=2){
@@ -286,14 +273,9 @@ function cleanPath(path){
   }
   clean.push(nextTempCoords)
   return clean;
-
-  // for(let i = 0; i < path.length; i+=2){
-  //   var tempCoords = [path[i][1], path[i][2]];
-  //   clean.push(tempCoords);
-  // }
-  // return clean
 }
-export function verifyPaths(){
+
+export function verifyPaths(){ // loops over all unverified paths and passes them to be verified
   for (pathCounter; pathCounter < pathcount; pathCounter++){ // global pathcount shared with pathtrack.js
     var pathToVerify = pathsDic[pathCounter];
     verify(pathToVerify);
@@ -301,9 +283,10 @@ export function verifyPaths(){
 }
 
 export function verify(path){
-  if (path[1][0] === undefined){
+  if (path[1][0] === undefined){ // if the line is a dot ignore it
     return;
   }
+
   var startPoint = [path[1][0][1], path[1][0][2]];
   var endPointReference = path[1];
   var endPointLength = endPointReference.length-1;
@@ -311,30 +294,29 @@ export function verify(path){
 
   for (let k = 0; k < currentAirports.length; k++) { // logic to determine if its valid
     if (currentAirports[k].type === "OUTGOING"){
-      if (currentAirports[k].location[0] - startPoint[0] < LEEWAY && currentAirports[k].location[0] - startPoint[0] > -LEEWAY){
-        if (currentAirports[k].location[1] - startPoint[1] < LEEWAY && currentAirports[k].location[1] - startPoint[1] > -LEEWAY){
-          // console.log("START POINT IS VALID");
+      if (currentAirports[k].location[0] - startPoint[0] < LEEWAY && currentAirports[k].location[0] - startPoint[0] > -LEEWAY){ 
+        if (currentAirports[k].location[1] - startPoint[1] < LEEWAY && currentAirports[k].location[1] - startPoint[1] > -LEEWAY){ // starting point is valid
           var airportA = currentAirports[k];
 
           var airportB;
           currentAirports.forEach(a => {
-            if (a.type == "INCOMING" && a !== airportA && a.colour === airportA.colour){
+            if (a.type == "INCOMING" && a !== airportA && a.colour === airportA.colour){ // just check the matching airport at this point
               airportB = a;
             }
           });
 
           if (airportB.location[0] - endPoint[0] < LEEWAY && airportB.location[0] - endPoint[0] > -LEEWAY){
-            if (airportB.location[1] - endPoint[1] < LEEWAY && airportB.location[1] - endPoint[1] > -LEEWAY){
-              // console.log("END POINT IS VALID");
+            if (airportB.location[1] - endPoint[1] < LEEWAY && airportB.location[1] - endPoint[1] > -LEEWAY){ // end point is valid
 
-              airportA.inUse = true;
-              airportB.inUse = true;
+              airportA.inUse = true; // set the aiports to in use so we 
+              airportB.inUse = true; // dont despawn them while a plane is flying
               
               pastNote = currentNote;
               currentNote = airportA.name + " received your route to " + airportB.name + ". Bon Voyage!";
               pastNoteIndex = currentNoteIndex;
               currentNoteIndex = 5;
-              pathsArray.push(cleanPath(path[1]));
+
+              pathsArray.push(cleanPath(path[1])); // add the path to the valid paths array
               live_planes.push(createPlane(cleanPath(path[1]),airportA,airportB));
               return; 
             }
@@ -343,7 +325,7 @@ export function verify(path){
       }
     }
   }
-  pastNote = currentNote;
+  pastNote = currentNote; // notify user if their path was invalid
   currentNote = "Invalid flight path!";
   pastNoteIndex = currentNoteIndex;
   currentNoteIndex = 6;

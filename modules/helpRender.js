@@ -50,7 +50,7 @@ export function placeURL(src, context, x, y, deg=0) {
     imgObj.onload = () => {
         // save current canvas rotation/position
         context.save();
-        context.translate(x, y); // translate the canvas positionare yall at the
+        context.translate(x, y); // translate the canvas position
         context.rotate(deg*Math.PI/180); // rorate the canvas draw pos
 
         context.drawImage(imgObj, 0, 0);
