@@ -7,7 +7,7 @@ var timer = 1; // game timer
 var score = 0; // user's score
 var gaming; // boolean for alive
 var level = 1; 
-const LEVELTIME = 80; // amount of ticks inbetween each level difficulty
+const LEVELTIME = 60; // amount of ticks inbetween each level difficulty
 const LEEWAY = 15; // this is the leeway in the distance from the airport for valid routes
 const MAXAIRPORTTIME = 120;
 const TICKSPEED = 400; // game will tick every 500milliseconds
