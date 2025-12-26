@@ -27,6 +27,7 @@ should automatically open in your browser...
 ```
 
 ### Demo
+https://calumvc.github.io/FreeToFly/
 
 ![start](./assets/demo/1-start.png)
 
