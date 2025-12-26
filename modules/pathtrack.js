@@ -9,8 +9,17 @@ window.addEventListener("DOMContentLoaded", (e) => {
 
 
     function singleRecord(event, record) {
-        var x = event.clientX;
-        var y = event.clientY;
+        if (event.type == "mousemove") {
+            var x = event.clientX;
+            var y = event.clientY;
+        }
+        else if (event.type == "touchmove") {
+            let touch = event.touches[0]
+            var x = touch.clientX;
+            var y = touch.clientY;
+        }
+        else { console.log("panic! singleRecord given a non-mouse non-touch event! how did this happen :("); }
+
         record.push([x, y]);
 
         if (firstDraw == 0) {
@@ -29,15 +38,24 @@ window.addEventListener("DOMContentLoaded", (e) => {
     }
 
     function compareDistance(event,lastpos){ //only record after some distance moved
-    currentX = event.clientX;
-    currentY = event.clientY;
-    lastX = lastpos[0];
-    lastY = lastpos[1];
-    if ((currentX - lastX)**2 + (currentY - lastY)**2 > 20){ // modify the number to determine the distance between path dots
-        return 1;
-    }else {
-        return 0;
-    }
+        if (event.type == "mousemove") {
+            currentX = event.clientX;
+            currentY = event.clientY;
+        }
+        else if (event.type == "touchmove") {
+            let touch = event.touches[0]
+            currentX = touch.clientX;
+            currentY = touch.clientY;
+        }
+        else { console.log("panic! compareDistance given a non-mouse non-touch event! how did this happen :("); }
+
+        lastX = lastpos[0];
+        lastY = lastpos[1];
+        if ((currentX - lastX)**2 + (currentY - lastY)**2 > 20){ // modify the number to determine the distance between path dots
+            return 1;
+        }else {
+            return 0;
+        }
     }
 
     function drawdot(x, y) {
@@ -54,20 +72,24 @@ window.addEventListener("DOMContentLoaded", (e) => {
         pathsDic[pathcount].push(currentPath);
     }
 
-    canvas.addEventListener('mousedown', (e) => {
+    const pathStartHandler = (e) => {
         flag = 1;
         pathsDic[pathcount] = []
-    });
+    }
+    canvas.addEventListener('touchstart', pathStartHandler);
+    canvas.addEventListener('mousedown', pathStartHandler);
 
-    canvas.addEventListener('mousemove', (e) => {
+    const pathDrawHandler = (e) => {
         if (flag == 1) {
             if (compareDistance(e, lastposition) == 1) {
                 singleRecord(e, record);
             }
         }
-    })
+    }
+    canvas.addEventListener('mousemove', pathDrawHandler);
+    canvas.addEventListener('touchmove', pathDrawHandler);
 
-    canvas.addEventListener('mouseup', (e) => {
+    const pathEndHandler = (e) => {
         flag = 0;
         firstDraw = 0;
         record = [];
@@ -76,5 +98,7 @@ window.addEventListener("DOMContentLoaded", (e) => {
         pathcount++;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    })
+    }
+    canvas.addEventListener('mouseup', pathEndHandler);
+    canvas.addEventListener('touchend', pathEndHandler);
 })
